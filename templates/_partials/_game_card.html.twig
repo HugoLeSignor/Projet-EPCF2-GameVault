@@ -1,0 +1,27 @@
+<div class="game-card">
+    <a href="{{ path('app_game_show', {igdbId: game.igdbId}) }}">
+        {% if game.imageFilename %}
+            <img src="{{ vich_uploader_asset(game, 'imageFile') }}" alt="{{ game.titre }}" class="game-card__image">
+        {% elseif game.imageUrl %}
+            <img src="{{ game.imageUrl }}" alt="{{ game.titre }}" class="game-card__image">
+        {% else %}
+            <div class="game-card__placeholder">🎮</div>
+        {% endif %}
+    </a>
+    <div class="game-card__body">
+        <h3 class="game-card__title">
+            <a href="{{ path('app_game_show', {igdbId: game.igdbId}) }}">{{ game.titre }}</a>
+        </h3>
+        <div class="game-card__meta">
+            <span class="game-card__tag">{{ game.plateforme }}</span>
+            <span class="game-card__tag">{{ game.genre }}</span>
+        </div>
+        {% if showActions is defined and showActions %}
+            <div class="game-card__actions">
+                {% if is_granted('ROLE_USER') %}
+                    <a href="{{ path('app_collection_add', {id: game.id}) }}" class="btn btn--primary btn--sm">+ Collection</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>

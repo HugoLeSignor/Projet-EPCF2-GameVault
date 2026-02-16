@@ -1,0 +1,55 @@
+{% extends 'admin/_layout.html.twig' %}
+
+{% block title %}Moderation des avis - GameVault{% endblock %}
+
+{% block admin_content %}
+    <div class="page-header">
+        <h1 class="page-header__title">Moderation des avis</h1>
+        <div class="page-header__actions">
+            <a href="{{ path('admin_review_index', {filter: 'pending'}) }}" class="btn{% if filter == 'pending' %} btn--primary{% else %} btn--outline{% endif %} btn--sm">En attente</a>
+            <a href="{{ path('admin_review_index', {filter: 'all'}) }}" class="btn{% if filter == 'all' %} btn--primary{% else %} btn--outline{% endif %} btn--sm">Tous</a>
+        </div>
+    </div>
+
+    {% if pagination|length > 0 %}
+        {% for review in pagination %}
+            <div class="review-card">
+                <div class="review-card__header">
+                    <div class="review-card__author">
+                        <div class="review-card__avatar-placeholder">
+                            {{ review.user.pseudo|first|upper }}
+                        </div>
+                        <div>
+                            <div class="review-card__name">{{ review.user.pseudo }} sur <strong>{{ review.game.titre }}</strong></div>
+                            <div class="review-card__date">{{ review.createdAt|date('d/m/Y H:i') }} — {% if review.approved %}Approuve{% else %}En attente{% endif %}</div>
+                        </div>
+                    </div>
+                    {% include '_partials/_star_rating.html.twig' with {rating: review.note} %}
+                </div>
+                <div class="review-card__content">
+                    {{ review.contenu|nl2br }}
+                </div>
+                <div class="review-card__footer">
+                    <div class="review-card__actions">
+                        {% if not review.approved %}
+                            <form action="{{ path('admin_review_approve', {id: review.id}) }}" method="post" style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('approve' ~ review.id) }}">
+                                <button type="submit" class="btn btn--success btn--sm">Approuver</button>
+                            </form>
+                        {% endif %}
+                        <form action="{{ path('admin_review_reject', {id: review.id}) }}" method="post" style="display:inline;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ review.id) }}">
+                            <button type="submit" class="btn btn--danger btn--sm" onclick="return confirm('Rejeter et supprimer cet avis ?')">Rejeter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {{ knp_pagination_render(pagination) }}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">✅</div>
+            <h3 class="empty-state__title">Aucun avis en attente</h3>
+        </div>
+    {% endif %}
+{% endblock %}

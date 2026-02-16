@@ -1,0 +1,57 @@
+{% extends 'admin/_layout.html.twig' %}
+
+{% block title %}Gestion des utilisateurs - GameVault{% endblock %}
+
+{% block admin_content %}
+    <div class="page-header">
+        <h1 class="page-header__title">Gestion des utilisateurs</h1>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Inscrit le</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in pagination %}
+                <tr>
+                    <td><strong>{{ user.pseudo }}</strong></td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            <span class="badge badge--termine">Admin</span>
+                        {% else %}
+                            <span class="badge badge--backlog">User</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.createdAt|date('d/m/Y') }}</td>
+                    <td>
+                        <div class="d-flex gap-sm">
+                            <form action="{{ path('admin_user_toggle_role', {id: user.id}) }}" method="post" style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ user.id) }}">
+                                {% if 'ROLE_ADMIN' in user.roles %}
+                                    <button type="submit" class="btn btn--outline btn--sm">Retirer admin</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn--outline btn--sm">Promouvoir admin</button>
+                                {% endif %}
+                            </form>
+                            {% if user != app.user %}
+                                <form action="{{ path('admin_user_delete', {id: user.id}) }}" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                    <button type="submit" class="btn btn--danger btn--sm" onclick="return confirm('Supprimer cet utilisateur ?')">Supprimer</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {{ knp_pagination_render(pagination) }}
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ma Collection - GameVault{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1 class="page-header__title">Ma Collection</h1>
+        <div class="page-header__actions">
+            <a href="{{ path('app_game_index') }}" class="btn btn--primary">Parcourir le catalogue</a>
+        </div>
+    </div>
+
+    <div class="filter-bar">
+        {{ form_start(filterForm, {attr: {class: 'filter-bar__form'}}) }}
+            <div class="filter-bar__field filter-bar__search">
+                {{ form_widget(filterForm.search, {attr: {class: 'form-input'}}) }}
+            </div>
+            <div class="filter-bar__field">
+                {{ form_widget(filterForm.plateforme, {attr: {class: 'form-select'}}) }}
+            </div>
+            <div class="filter-bar__field">
+                {{ form_widget(filterForm.genre, {attr: {class: 'form-select'}}) }}
+            </div>
+            <div class="filter-bar__field">
+                {{ form_widget(filterForm.statut, {attr: {class: 'form-select'}}) }}
+            </div>
+            <div class="filter-bar__actions">
+                <button type="submit" class="btn btn--primary btn--sm">Filtrer</button>
+                <a href="{{ path('app_collection_index') }}" class="btn btn--outline btn--sm">Reset</a>
+            </div>
+        {{ form_end(filterForm) }}
+    </div>
+
+    {% if pagination|length > 0 %}
+        {% for entry in pagination %}
+            <div class="collection-item">
+                {% if entry.game.imageFilename %}
+                    <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="{{ entry.game.titre }}" class="collection-item__image">
+                {% elseif entry.game.imageUrl %}
+                    <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="collection-item__image">
+                {% else %}
+                    <div class="collection-item__placeholder">🎮</div>
+                {% endif %}
+
+                <div class="collection-item__info">
+                    <h3 class="collection-item__title">
+                        <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}">{{ entry.game.titre }}</a>
+                    </h3>
+                    <div class="collection-item__meta">
+                        <span class="badge badge--{{ entry.statut.cssClass }}">{{ entry.statut.label }}</span>
+                        <span>{{ entry.game.plateforme }}</span>
+                        <span>{{ entry.game.genre }}</span>
+                        {% if entry.note %}
+                            <span class="collection-item__rating">{{ entry.note }}/10</span>
+                        {% endif %}
+                        <span>{{ entry.tempsDeJeuFormatted }}</span>
+                    </div>
+                    {% if entry.progression and entry.statut.value in ['en_cours', 'en_pause'] %}
+                        <div class="collection-item__progression">
+                            <strong>Progression :</strong> {{ entry.progression }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="collection-item__actions">
+                    <a href="{{ path('app_collection_edit', {id: entry.id}) }}" class="btn btn--outline btn--sm">Modifier</a>
+                    <form action="{{ path('app_collection_delete', {id: entry.id}) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entry.id) }}">
+                        <button type="submit" class="btn btn--danger btn--sm" onclick="return confirm('Retirer ce jeu de votre collection ?')">Retirer</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+        {{ knp_pagination_render(pagination) }}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">📦</div>
+            <h3 class="empty-state__title">Votre collection est vide</h3>
+            <p class="empty-state__text">Parcourez le catalogue pour ajouter des jeux.</p>
+            <a href="{{ path('app_game_index') }}" class="btn btn--primary">Parcourir le catalogue</a>
+        </div>
+    {% endif %}
+{% endblock %}

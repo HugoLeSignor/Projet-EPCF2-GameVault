@@ -1,0 +1,207 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ profileUser.pseudo }} - GameVault{% endblock %}
+
+{% block body %}
+    {# ── Banner + Avatar ── #}
+    <div class="profile-banner">
+        {% if profileUser.bannerFilename %}
+            <img src="{{ vich_uploader_asset(profileUser, 'bannerFile') }}" alt="" class="profile-banner__image">
+        {% endif %}
+        <div class="profile-banner__overlay"></div>
+    </div>
+
+    <div class="profile-hero">
+        <div class="profile-hero__avatar">
+            {% if profileUser.avatarFilename %}
+                <img src="{{ vich_uploader_asset(profileUser, 'avatarFile') }}" alt="{{ profileUser.pseudo }}">
+            {% else %}
+                <span>{{ profileUser.pseudo|first|upper }}</span>
+            {% endif %}
+        </div>
+
+        <div class="profile-hero__info">
+            <div class="profile-hero__top">
+                <h1 class="profile-hero__name">{{ profileUser.pseudo }}</h1>
+            </div>
+            {% if profileUser.bio %}
+                <p class="profile-hero__bio">{{ profileUser.bio }}</p>
+            {% endif %}
+            <p class="profile-hero__joined">Membre depuis {{ profileUser.createdAt|date('M Y') }}</p>
+        </div>
+    </div>
+
+    {# ── Stats Overview ── #}
+    <div class="profile-stats-bar">
+        <div class="profile-stats-bar__item">
+            <span class="profile-stats-bar__value">{{ stats.totalGames }}</span>
+            <span class="profile-stats-bar__label">Total jeux</span>
+        </div>
+        <div class="profile-stats-bar__item">
+            <span class="profile-stats-bar__value">{{ stats.daysPlayed }}</span>
+            <span class="profile-stats-bar__label">Jours joués</span>
+        </div>
+        <div class="profile-stats-bar__item">
+            <span class="profile-stats-bar__value">{{ stats.averageRating ?? '-' }}<small>/10</small></span>
+            <span class="profile-stats-bar__label">Note moyenne</span>
+        </div>
+        <div class="profile-stats-bar__item">
+            <span class="profile-stats-bar__value">{{ stats.finishedGames }}</span>
+            <span class="profile-stats-bar__label">Terminés</span>
+        </div>
+        <div class="profile-stats-bar__item">
+            <span class="profile-stats-bar__value">{{ stats.reviewCount }}</span>
+            <span class="profile-stats-bar__label">Avis</span>
+        </div>
+    </div>
+
+    {# ── Status Distribution Bar ── #}
+    {% if stats.totalGames > 0 %}
+        <div class="status-segment">
+            <div class="status-segment__bar">
+                {% for status, count in stats.statusDistribution %}
+                    {% if count > 0 %}
+                        <div class="status-segment__fill status-segment__fill--{{ status }}"
+                             style="width: {{ (count / stats.totalGames * 100) }}%"
+                             title="{{ count }}">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="status-segment__legend">
+                {% for status, count in stats.statusDistribution %}
+                    {% if count > 0 %}
+                        <span class="status-segment__item">
+                            <span class="status-segment__dot status-segment__dot--{{ status }}"></span>
+                            {{ count }}
+                        </span>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {# ── Currently Playing ── #}
+    {% if stats.currentlyPlaying|length > 0 %}
+        <section class="profile-section">
+            <h2 class="profile-section__title">En cours</h2>
+            <div class="profile-cards">
+                {% for entry in stats.currentlyPlaying %}
+                    <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}" class="profile-game-card">
+                        {% if entry.game.imageUrl %}
+                            <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
+                        {% elseif entry.game.imageFilename %}
+                            <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
+                        {% else %}
+                            <div class="profile-game-card__placeholder">🎮</div>
+                        {% endif %}
+                        <div class="profile-game-card__overlay">
+                            <span class="profile-game-card__title">{{ entry.game.titre }}</span>
+                            {% if entry.progression %}
+                                <span class="profile-game-card__progress">{{ entry.progression }}</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    {# ── Favorites ── #}
+    {% if stats.favorites|length > 0 %}
+        <section class="profile-section">
+            <h2 class="profile-section__title">Favoris</h2>
+            <div class="profile-cards profile-cards--wide">
+                {% for entry in stats.favorites %}
+                    <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}" class="profile-game-card">
+                        {% if entry.game.imageUrl %}
+                            <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
+                        {% elseif entry.game.imageFilename %}
+                            <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
+                        {% else %}
+                            <div class="profile-game-card__placeholder">🎮</div>
+                        {% endif %}
+                        <div class="profile-game-card__overlay">
+                            <span class="profile-game-card__title">{{ entry.game.titre }}</span>
+                            <span class="profile-game-card__rating">{{ entry.note }}/10</span>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    {# ── Genre & Platform Distribution ── #}
+    {% if stats.genreDistribution|length > 0 or stats.platformDistribution|length > 0 %}
+        <div class="profile-distributions">
+            {% if stats.genreDistribution|length > 0 %}
+                <div class="profile-distrib-card">
+                    <h3 class="profile-distrib-card__title">Genres</h3>
+                    {% for genre, count in stats.genreDistribution %}
+                        <div class="profile-distrib-card__row">
+                            <span class="profile-distrib-card__label">{{ genre }}</span>
+                            <div class="profile-distrib-card__track">
+                                <div class="profile-distrib-card__fill" style="width: {{ (count / stats.totalGames * 100)|round }}%"></div>
+                            </div>
+                            <span class="profile-distrib-card__count">{{ count }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if stats.platformDistribution|length > 0 %}
+                <div class="profile-distrib-card">
+                    <h3 class="profile-distrib-card__title">Plateformes</h3>
+                    {% for platform, count in stats.platformDistribution %}
+                        <div class="profile-distrib-card__row">
+                            <span class="profile-distrib-card__label">{{ platform }}</span>
+                            <div class="profile-distrib-card__track">
+                                <div class="profile-distrib-card__fill" style="width: {{ (count / stats.totalGames * 100)|round }}%"></div>
+                            </div>
+                            <span class="profile-distrib-card__count">{{ count }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# ── Full Collection ── #}
+    {% if pagination|length > 0 %}
+        <section class="profile-section">
+            <h2 class="profile-section__title">Collection</h2>
+            {% for entry in pagination %}
+                <div class="collection-item">
+                    {% if entry.game.imageUrl %}
+                        <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="collection-item__image">
+                    {% elseif entry.game.imageFilename %}
+                        <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="{{ entry.game.titre }}" class="collection-item__image">
+                    {% else %}
+                        <div class="collection-item__placeholder">🎮</div>
+                    {% endif %}
+
+                    <div class="collection-item__info">
+                        <h3 class="collection-item__title">
+                            <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}">{{ entry.game.titre }}</a>
+                        </h3>
+                        <div class="collection-item__meta">
+                            <span class="badge badge--{{ entry.statut.cssClass }}">{{ entry.statut.label }}</span>
+                            <span>{{ entry.game.plateforme }}</span>
+                            <span>{{ entry.game.genre }}</span>
+                            {% if entry.note %}
+                                <span class="collection-item__rating">{{ entry.note }}/10</span>
+                            {% endif %}
+                            <span>{{ entry.tempsDeJeuFormatted }}</span>
+                        </div>
+                        {% if entry.progression and entry.statut.value in ['en_cours', 'en_pause'] %}
+                            <div class="collection-item__progression">
+                                <strong>Progression :</strong> {{ entry.progression }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            {{ knp_pagination_render(pagination) }}
+        </section>
+    {% endif %}
+{% endblock %}

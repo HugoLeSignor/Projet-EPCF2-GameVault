@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="d-flex gap-lg">
+        <aside class="admin-sidebar">
+            <h3 class="admin-sidebar__title">Administration</h3>
+            <a href="{{ path('admin_dashboard') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') == 'admin_dashboard' %} admin-sidebar__link--active{% endif %}">Tableau de bord</a>
+            <a href="{{ path('admin_game_index') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_game' %} admin-sidebar__link--active{% endif %}">Jeux</a>
+            <a href="{{ path('admin_review_index') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_review' %} admin-sidebar__link--active{% endif %}">Avis</a>
+            <a href="{{ path('admin_user_index') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_user' %} admin-sidebar__link--active{% endif %}">Utilisateurs</a>
+            <a href="{{ path('admin_igdb_search') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_igdb' %} admin-sidebar__link--active{% endif %}">Importer IGDB</a>
+        </aside>
+        <div style="flex: 1; min-width: 0;">
+            {% block admin_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

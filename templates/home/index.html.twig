@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GameVault - Gerez votre collection de jeux{% endblock %}
+
+{% block body %}
+    <div class="text-center mb-xl">
+        <h1>Bienvenue sur GameVault</h1>
+        <p class="text-lg">Gerez votre collection de jeux video, suivez votre progression et partagez vos avis.</p>
+        {% if not app.user %}
+            <div class="d-flex justify-between gap-md" style="justify-content: center;">
+                <a href="{{ path('app_register') }}" class="btn btn--primary btn--lg">Creer un compte</a>
+                <a href="{{ path('app_game_index') }}" class="btn btn--outline btn--lg">Parcourir le catalogue</a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if latestGames|length > 0 %}
+        <h2>Derniers jeux ajoutes</h2>
+        <div class="grid grid--4">
+            {% for game in latestGames %}
+                {% include '_partials/_game_card.html.twig' with {game: game, showActions: true} %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">🎮</div>
+            <h3 class="empty-state__title">Aucun jeu dans le catalogue</h3>
+            <p class="empty-state__text">Le catalogue est vide pour le moment.</p>
+        </div>
+    {% endif %}
+{% endblock %}

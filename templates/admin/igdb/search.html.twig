@@ -1,0 +1,76 @@
+{% extends 'admin/_layout.html.twig' %}
+
+{% block title %}Importer depuis IGDB - Admin{% endblock %}
+
+{% block admin_content %}
+    <div class="page-header">
+        <h1 class="page-header__title">Importer depuis IGDB</h1>
+    </div>
+
+    <form method="get" action="{{ path('admin_igdb_search') }}" class="igdb-search-form">
+        <div class="d-flex gap-sm">
+            <input type="text" name="q" value="{{ query }}" placeholder="Rechercher un jeu sur IGDB..." class="form-input" style="flex: 1;" autofocus>
+            <button type="submit" class="btn btn--primary">Rechercher</button>
+        </div>
+    </form>
+
+    {% if error %}
+        <div class="flash flash--danger">{{ error }}</div>
+    {% endif %}
+
+    {% if query and results|length == 0 and not error %}
+        <div class="empty-state">
+            <div class="empty-state__icon">🔍</div>
+            <h3 class="empty-state__title">Aucun résultat</h3>
+            <p class="empty-state__text">Aucun jeu trouvé pour "{{ query }}".</p>
+        </div>
+    {% endif %}
+
+    {% if results|length > 0 %}
+        <p class="text-muted mt-md mb-md">{{ results|length }} résultat(s) pour "{{ query }}"</p>
+
+        <div class="igdb-results">
+            {% for game in results %}
+                <div class="igdb-card">
+                    <div class="igdb-card__image">
+                        {% if game.coverUrl %}
+                            <img src="{{ game.coverUrl }}" alt="{{ game.name }}">
+                        {% else %}
+                            <div class="game-card__placeholder">🎮</div>
+                        {% endif %}
+                    </div>
+                    <div class="igdb-card__body">
+                        <h3 class="igdb-card__title">{{ game.name }}</h3>
+                        <div class="igdb-card__meta">
+                            <span class="game-card__tag">{{ game.platform }}</span>
+                            <span class="game-card__tag">{{ game.genre }}</span>
+                            {% if game.releaseDate %}
+                                <span class="text-muted text-sm">{{ game.releaseDate }}</span>
+                            {% endif %}
+                        </div>
+                        {% if game.developer or game.publisher %}
+                            <p class="text-sm text-muted">
+                                {% if game.developer %}Dev: {{ game.developer }}{% endif %}
+                                {% if game.developer and game.publisher %} | {% endif %}
+                                {% if game.publisher %}Ed: {{ game.publisher }}{% endif %}
+                            </p>
+                        {% endif %}
+                        {% if game.summary %}
+                            <p class="igdb-card__summary">{{ game.summary|length > 200 ? game.summary|slice(0, 200) ~ '...' : game.summary }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="igdb-card__actions">
+                        {% if alreadyImported[game.igdbId] is defined %}
+                            <span class="btn btn--outline btn--sm" style="opacity: 0.5; cursor: default;">Déjà importé</span>
+                        {% else %}
+                            <form method="post" action="{{ path('admin_igdb_import', {igdbId: game.igdbId}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('igdb_import_' ~ game.igdbId) }}">
+                                <button type="submit" class="btn btn--primary btn--sm">Importer</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

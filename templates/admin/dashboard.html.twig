@@ -1,0 +1,31 @@
+{% extends 'admin/_layout.html.twig' %}
+
+{% block title %}Admin - GameVault{% endblock %}
+
+{% block admin_content %}
+    <h1>Tableau de bord</h1>
+
+    <div class="stats-grid">
+        <div class="stats-grid__card">
+            <div class="stats-grid__value">{{ totalGames }}</div>
+            <div class="stats-grid__label">Jeux</div>
+        </div>
+        <div class="stats-grid__card">
+            <div class="stats-grid__value">{{ totalUsers }}</div>
+            <div class="stats-grid__label">Utilisateurs</div>
+        </div>
+        <div class="stats-grid__card">
+            <div class="stats-grid__value">{{ pendingReviews }}</div>
+            <div class="stats-grid__label">Avis en attente</div>
+        </div>
+        <div class="stats-grid__card">
+            <div class="stats-grid__value">{{ totalReviews }}</div>
+            <div class="stats-grid__label">Total avis</div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-md mt-lg">
+        <a href="{{ path('admin_game_new') }}" class="btn btn--primary">Ajouter un jeu</a>
+        <a href="{{ path('admin_review_index', {filter: 'pending'}) }}" class="btn btn--outline">Moderer les avis</a>
+    </div>
+{% endblock %}

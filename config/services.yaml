@@ -21,3 +21,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\IgdbService:
+        arguments:
+            $igdbClientId: '%env(IGDB_CLIENT_ID)%'
+            $igdbClientSecret: '%env(IGDB_CLIENT_SECRET)%'

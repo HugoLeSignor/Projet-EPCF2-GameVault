@@ -7,14 +7,28 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/doctrine-bundle": "^2.18",
+        "doctrine/doctrine-migrations-bundle": "^3.7",
+        "doctrine/orm": "^3.6",
+        "knplabs/knp-paginator-bundle": "^6.10",
         "symfony/console": "7.4.*",
         "symfony/dotenv": "7.4.*",
         "symfony/flex": "^2",
+        "symfony/form": "7.4.*",
         "symfony/framework-bundle": "7.4.*",
+        "symfony/http-client": "7.4.*",
+        "symfony/mailer": "7.4.*",
         "symfony/runtime": "7.4.*",
-        "symfony/yaml": "7.4.*"
-    },
-    "require-dev": {
+        "symfony/security-bundle": "7.4.*",
+        "symfony/security-csrf": "7.4.*",
+        "symfony/string": "7.4.*",
+        "symfony/translation": "7.4.*",
+        "symfony/twig-bundle": "7.4.*",
+        "symfony/validator": "7.4.*",
+        "symfony/webpack-encore-bundle": "^2.4",
+        "symfony/yaml": "7.4.*",
+        "symfonycasts/reset-password-bundle": "^1.24",
+        "vich/uploader-bundle": "^2.9"
     },
     "config": {
         "allow-plugins": {
@@ -65,5 +79,13 @@
             "allow-contrib": false,
             "require": "7.4.*"
         }
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.3",
+        "symfony/debug-bundle": "7.4.*",
+        "symfony/maker-bundle": "^1.66",
+        "symfony/monolog-bundle": "^3.0|^4.0",
+        "symfony/stopwatch": "7.4.*",
+        "symfony/web-profiler-bundle": "7.4.*"
     }
 }

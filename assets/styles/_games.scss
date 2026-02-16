@@ -1,0 +1,245 @@
+.game-card {
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-sm;
+    transition: $transition-base;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: $shadow-lg;
+    }
+
+    &__image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 0;
+    }
+
+    &__placeholder {
+        width: 100%;
+        height: 200px;
+        background-color: $color-bg-secondary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $color-text-muted;
+        font-size: $font-size-xxl;
+    }
+
+    &__body {
+        padding: $spacing-md;
+    }
+
+    &__title {
+        font-size: $font-size-base;
+        font-weight: 600;
+        margin-bottom: $spacing-xs;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__meta {
+        display: flex;
+        gap: $spacing-sm;
+        flex-wrap: wrap;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__tag {
+        font-size: 0.7rem;
+        padding: 2px $spacing-sm;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: $radius-pill;
+        color: $color-text-muted;
+    }
+
+    &__actions {
+        display: flex;
+        gap: $spacing-xs;
+        margin-top: $spacing-sm;
+    }
+}
+
+// Game detail page
+.game-detail {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: $spacing-xl;
+
+    &__image {
+        width: 100%;
+        border-radius: $radius-lg;
+    }
+
+    &__placeholder {
+        width: 100%;
+        height: 400px;
+        background-color: $color-bg-secondary;
+        border-radius: $radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $color-text-muted;
+        font-size: 4rem;
+    }
+
+    &__info {
+        h1 {
+            font-size: $font-size-xxl;
+            margin-bottom: $spacing-md;
+        }
+    }
+
+    &__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__description {
+        color: $color-text-secondary;
+        line-height: 1.8;
+        margin-bottom: $spacing-xl;
+    }
+
+    &__stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: $spacing-md;
+        margin-bottom: $spacing-xl;
+    }
+
+    &__stat {
+        background-color: $color-bg-secondary;
+        padding: $spacing-md;
+        border-radius: $radius-md;
+        text-align: center;
+
+        &-value {
+            font-size: $font-size-xl;
+            font-weight: 700;
+            color: $color-accent;
+        }
+
+        &-label {
+            font-size: $font-size-sm;
+            color: $color-text-muted;
+        }
+    }
+}
+
+// IGDB import cards
+.igdb-search-form {
+    margin-bottom: $spacing-xl;
+}
+
+.igdb-results {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+}
+
+.igdb-card {
+    display: flex;
+    gap: $spacing-lg;
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-md;
+    transition: $transition-base;
+
+    &:hover {
+        box-shadow: $shadow-md;
+    }
+
+    &__image {
+        flex-shrink: 0;
+        width: 120px;
+        height: 160px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: $radius-md;
+        }
+
+        .game-card__placeholder {
+            width: 100%;
+            height: 100%;
+            font-size: $font-size-xxl;
+        }
+    }
+
+    &__body {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__title {
+        font-size: $font-size-lg;
+        font-weight: 600;
+        margin-bottom: $spacing-xs;
+    }
+
+    &__meta {
+        display: flex;
+        gap: $spacing-sm;
+        flex-wrap: wrap;
+        margin-bottom: $spacing-sm;
+        align-items: center;
+    }
+
+    &__summary {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        line-height: 1.5;
+        margin-top: $spacing-sm;
+    }
+
+    &__actions {
+        flex-shrink: 0;
+        display: flex;
+        align-items: flex-start;
+    }
+}
+
+// Filter bar
+.filter-bar {
+    background-color: $color-bg-secondary;
+    padding: $spacing-md $spacing-lg;
+    border-radius: $radius-lg;
+    margin-bottom: $spacing-xl;
+
+    &__form {
+        display: flex;
+        align-items: flex-end;
+        gap: $spacing-md;
+        flex-wrap: wrap;
+    }
+
+    &__field {
+        flex: 1;
+        min-width: 150px;
+
+        label {
+            display: block;
+            font-size: $font-size-sm;
+            color: $color-text-muted;
+            margin-bottom: $spacing-xs;
+        }
+    }
+
+    &__search {
+        flex: 2;
+    }
+
+    &__actions {
+        display: flex;
+        gap: $spacing-sm;
+        align-items: flex-end;
+    }
+}

@@ -1,0 +1,27 @@
+<nav class="navbar">
+    <div class="navbar__container">
+        <a href="{{ path('app_home') }}" class="navbar__brand">GameVault</a>
+
+        <ul class="navbar__menu">
+            <li><a href="{{ path('app_game_index') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_game' %} navbar__link--active{% endif %}">Catalogue</a></li>
+            <li><a href="{{ path('app_users') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_user' %} navbar__link--active{% endif %}">Communauté</a></li>
+            {% if is_granted('ROLE_USER') %}
+                <li><a href="{{ path('app_collection_index') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_collection' %} navbar__link--active{% endif %}">Ma Collection</a></li>
+                <li><a href="{{ path('app_profile') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_profile' %} navbar__link--active{% endif %}">Profil</a></li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('admin_dashboard') }}" class="navbar__link navbar__link--admin{% if app.request.attributes.get('_route') starts with 'admin_' %} navbar__link--active{% endif %}">Admin</a></li>
+            {% endif %}
+        </ul>
+
+        <div class="navbar__auth">
+            {% if app.user %}
+                <span class="navbar__user">{{ app.user.pseudo }}</span>
+                <a href="{{ path('app_logout') }}" class="btn btn--outline btn--sm">Deconnexion</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn--outline btn--sm">Connexion</a>
+                <a href="{{ path('app_register') }}" class="btn btn--primary btn--sm">Inscription</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

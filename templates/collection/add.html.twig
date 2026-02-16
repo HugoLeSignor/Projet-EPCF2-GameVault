@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter {{ game.titre }} - GameVault{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1 class="page-header__title">Ajouter a ma collection</h1>
+    </div>
+
+    <div class="card" style="max-width: 600px;">
+        <h2>{{ game.titre }}</h2>
+        <p class="text-muted">{{ game.plateforme }} - {{ game.genre }}</p>
+
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="d-flex gap-sm mt-lg">
+                <button type="submit" class="btn btn--primary">Ajouter a ma collection</button>
+                <a href="{{ path('app_game_show', {igdbId: game.igdbId}) }}" class="btn btn--outline">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

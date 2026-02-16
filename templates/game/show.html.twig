@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ game.titre }} - GameVault{% endblock %}
+
+{% block body %}
+    <div class="game-detail">
+        <div>
+            {% if game.imageFilename %}
+                <img src="{{ vich_uploader_asset(game, 'imageFile') }}" alt="{{ game.titre }}" class="game-detail__image">
+            {% elseif game.imageUrl %}
+                <img src="{{ game.imageUrl }}" alt="{{ game.titre }}" class="game-detail__image">
+            {% else %}
+                <div class="game-detail__placeholder">🎮</div>
+            {% endif %}
+        </div>
+
+        <div class="game-detail__info">
+            <h1>{{ game.titre }}</h1>
+
+            <div class="game-detail__meta">
+                <span class="badge badge--en-cours">{{ game.plateforme }}</span>
+                <span class="badge badge--termine">{{ game.genre }}</span>
+                {% if game.dateDeSortie %}
+                    <span class="badge badge--backlog">{{ game.dateDeSortie|date('d/m/Y') }}</span>
+                {% endif %}
+            </div>
+
+            {% if game.developpeur or game.editeur %}
+                <p class="text-sm text-muted">
+                    {% if game.developpeur %}Dev: {{ game.developpeur }}{% endif %}
+                    {% if game.developpeur and game.editeur %} | {% endif %}
+                    {% if game.editeur %}Ed: {{ game.editeur }}{% endif %}
+                </p>
+            {% endif %}
+
+            {% if game.description %}
+                <div class="game-detail__description">
+                    {{ game.description|nl2br }}
+                </div>
+            {% endif %}
+
+            <div class="d-flex gap-sm mt-lg">
+                {% if is_granted('ROLE_USER') %}
+                    {% if inCollection %}
+                        <a href="{{ path('app_collection_edit', {id: inCollection.id}) }}" class="btn btn--outline">Modifier dans ma collection</a>
+                    {% else %}
+                        <a href="{{ path('app_collection_add', {id: game.id}) }}" class="btn btn--primary">Ajouter a ma collection</a>
+                    {% endif %}
+                    <a href="{{ path('app_review_new', {id: game.id}) }}" class="btn btn--outline">Laisser un avis</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Avis ({{ reviews|length }})</h2>
+
+    {% if reviews|length > 0 %}
+        {% for review in reviews %}
+            <div class="review-card">
+                <div class="review-card__header">
+                    <div class="review-card__author">
+                        <div class="review-card__avatar-placeholder">
+                            {{ review.user.pseudo|first|upper }}
+                        </div>
+                        <div>
+                            <div class="review-card__name">{{ review.user.pseudo }}</div>
+                            <div class="review-card__date">{{ review.createdAt|date('d/m/Y') }}</div>
+                        </div>
+                    </div>
+                    {% include '_partials/_star_rating.html.twig' with {rating: review.note} %}
+                </div>
+                <div class="review-card__content">
+                    {{ review.contenu|nl2br }}
+                </div>
+                {% if app.user and (review.user == app.user or is_granted('ROLE_ADMIN')) %}
+                    <div class="review-card__footer">
+                        <div class="review-card__actions">
+                            {% if review.user == app.user %}
+                                <a href="{{ path('app_review_edit', {id: review.id}) }}" class="btn btn--outline btn--sm">Modifier</a>
+                            {% endif %}
+                            <form action="{{ path('app_review_delete', {id: review.id}) }}" method="post" style="display:inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ review.id) }}">
+                                <button type="submit" class="btn btn--danger btn--sm" onclick="return confirm('Supprimer cet avis ?')">Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Aucun avis pour ce jeu.</p>
+    {% endif %}
+{% endblock %}
