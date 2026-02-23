@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Form\ProfileType;
-use App\Service\UserStatsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,14 +15,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ProfileController extends AbstractController
 {
     #[Route('', name: 'app_profile', methods: ['GET'])]
-    public function index(UserStatsService $statsService): Response
+    public function index(): Response
     {
-        $stats = $statsService->getStatsForUser($this->getUser());
-
-        return $this->render('profile/index.html.twig', [
-            'user' => $this->getUser(),
-            'stats' => $stats,
-        ]);
+        return $this->redirectToRoute('app_user_profile', ['id' => $this->getUser()->getId()]);
     }
 
     #[Route('/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]

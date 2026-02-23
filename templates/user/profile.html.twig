@@ -23,7 +23,9 @@
         <div class="profile-hero__info">
             <div class="profile-hero__top">
                 <h1 class="profile-hero__name">{{ profileUser.pseudo }}</h1>
-                {% if app.user and app.user != profileUser %}
+                {% if app.user and app.user == profileUser %}
+                    <a href="{{ path('app_profile_edit') }}" class="btn btn--outline btn--sm">Modifier le profil</a>
+                {% elseif app.user %}
                     <form action="{{ path('app_user_follow', {id: profileUser.id}) }}" method="post" style="display:inline;">
                         <input type="hidden" name="_token" value="{{ csrf_token('follow' ~ profileUser.id) }}">
                         {% if isFollowing %}
