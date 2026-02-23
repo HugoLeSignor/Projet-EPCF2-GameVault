@@ -95,56 +95,6 @@
         </div>
     {% endif %}
 
-    {# ── Currently Playing ── #}
-    {% if stats.currentlyPlaying|length > 0 %}
-        <section class="profile-section">
-            <h2 class="profile-section__title">En cours</h2>
-            <div class="profile-cards">
-                {% for entry in stats.currentlyPlaying %}
-                    <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}" class="profile-game-card">
-                        {% if entry.game.imageUrl %}
-                            <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
-                        {% elseif entry.game.imageFilename %}
-                            <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
-                        {% else %}
-                            <div class="profile-game-card__placeholder">🎮</div>
-                        {% endif %}
-                        <div class="profile-game-card__overlay">
-                            <span class="profile-game-card__title">{{ entry.game.titre }}</span>
-                            {% if entry.progression %}
-                                <span class="profile-game-card__progress">{{ entry.progression }}</span>
-                            {% endif %}
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
-        </section>
-    {% endif %}
-
-    {# ── Favorites ── #}
-    {% if stats.favorites|length > 0 %}
-        <section class="profile-section">
-            <h2 class="profile-section__title">Favoris</h2>
-            <div class="profile-cards profile-cards--wide">
-                {% for entry in stats.favorites %}
-                    <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}" class="profile-game-card">
-                        {% if entry.game.imageUrl %}
-                            <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
-                        {% elseif entry.game.imageFilename %}
-                            <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
-                        {% else %}
-                            <div class="profile-game-card__placeholder">🎮</div>
-                        {% endif %}
-                        <div class="profile-game-card__overlay">
-                            <span class="profile-game-card__title">{{ entry.game.titre }}</span>
-                            <span class="profile-game-card__rating">{{ entry.note }}/10</span>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
-        </section>
-    {% endif %}
-
     {# ── Genre & Platform Distribution ── #}
     {% if stats.genreDistribution|length > 0 or stats.platformDistribution|length > 0 %}
         <div class="profile-distributions">

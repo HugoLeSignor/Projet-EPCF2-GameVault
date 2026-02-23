@@ -39,7 +39,9 @@ class UserStatsService
             if ($entry->getNote() !== null) {
                 $ratingSum += $entry->getNote();
                 $ratingCount++;
-                $favorites[] = $entry;
+                if ($entry->getNote() >= 7) {
+                    $favorites[] = $entry;
+                }
             }
 
             if ($entry->getStatut() === GameStatus::EnCours) {
