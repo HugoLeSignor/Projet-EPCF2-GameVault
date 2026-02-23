@@ -70,12 +70,13 @@
     }
 
     &--favori-active {
-        background-color: transparent;
+        background-color: $color-danger;
         border-color: $color-danger;
-        color: $color-danger;
+        color: #fff;
 
         &:hover {
-            background-color: $color-danger;
+            background-color: darken($color-danger, 10%);
+            border-color: darken($color-danger, 10%);
             color: #fff;
         }
     }
