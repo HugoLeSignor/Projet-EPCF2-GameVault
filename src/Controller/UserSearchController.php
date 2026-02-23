@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Enum\GameStatus;
 use App\Repository\ReviewRepository;
 use App\Repository\UserFollowRepository;
 use App\Repository\UserGameCollectionRepository;
 use App\Repository\UserRepository;
 use App\Service\UserStatsService;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,17 +41,29 @@ class UserSearchController extends AbstractController
         UserStatsService $statsService,
         UserGameCollectionRepository $collectionRepo,
         UserFollowRepository $followRepo,
-        PaginatorInterface $paginator,
-        Request $request,
     ): Response {
         $stats = $statsService->getStatsForUser($user);
         $entries = $collectionRepo->findBy(['user' => $user], ['addedAt' => 'DESC']);
 
-        $pagination = $paginator->paginate(
-            $entries,
-            $request->query->getInt('page', 1),
-            20,
-        );
+        // Group entries by status in display order
+        $statusOrder = [
+            GameStatus::EnCours,
+            GameStatus::Termine,
+            GameStatus::EnPause,
+            GameStatus::Backlog,
+            GameStatus::Abandonne,
+        ];
+
+        $collectionByStatus = [];
+        foreach ($statusOrder as $status) {
+            $filtered = array_filter($entries, fn($e) => $e->getStatut() === $status);
+            if (!empty($filtered)) {
+                $collectionByStatus[] = [
+                    'status' => $status,
+                    'entries' => array_values($filtered),
+                ];
+            }
+        }
 
         $isFollowing = false;
         if ($this->getUser() && $this->getUser() !== $user) {
@@ -61,7 +73,7 @@ class UserSearchController extends AbstractController
         return $this->render('user/profile.html.twig', [
             'profileUser' => $user,
             'stats' => $stats,
-            'pagination' => $pagination,
+            'collectionByStatus' => $collectionByStatus,
             'isFollowing' => $isFollowing,
             'followersCount' => $followRepo->countFollowers($user),
             'followingCount' => $followRepo->countFollowing($user),

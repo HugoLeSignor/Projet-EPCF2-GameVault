@@ -180,42 +180,74 @@
         </div>
     {% endif %}
 
-    {# ── Full Collection ── #}
-    {% if pagination|length > 0 %}
-        <section class="profile-section">
-            <h2 class="profile-section__title">Collection</h2>
-            {% for entry in pagination %}
-                <div class="collection-item">
-                    {% if entry.game.imageUrl %}
-                        <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="collection-item__image">
-                    {% elseif entry.game.imageFilename %}
-                        <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="{{ entry.game.titre }}" class="collection-item__image">
-                    {% else %}
-                        <div class="collection-item__placeholder">🎮</div>
-                    {% endif %}
-
-                    <div class="collection-item__info">
-                        <h3 class="collection-item__title">
-                            <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}">{{ entry.game.titre }}</a>
-                        </h3>
-                        <div class="collection-item__meta">
-                            <span class="badge badge--{{ entry.statut.cssClass }}">{{ entry.statut.label }}</span>
-                            <span>{{ entry.game.plateforme }}</span>
-                            <span>{{ entry.game.genre }}</span>
-                            {% if entry.note %}
-                                <span class="collection-item__rating">{{ entry.note }}/10</span>
-                            {% endif %}
-                            <span>{{ entry.tempsDeJeuFormatted }}</span>
-                        </div>
-                        {% if entry.progression and entry.statut.value in ['en_cours', 'en_pause'] %}
-                            <div class="collection-item__progression">
-                                <strong>Progression :</strong> {{ entry.progression }}
-                            </div>
-                        {% endif %}
-                    </div>
+    {# ── Full Collection (AniList-style grouped tables) ── #}
+    {% if collectionByStatus|length > 0 %}
+        {% for group in collectionByStatus %}
+            <section class="profile-collection-group">
+                <div class="profile-collection-group__header profile-collection-group__header--{{ group.status.value }}">
+                    <h2 class="profile-collection-group__title">{{ group.status.label }}</h2>
+                    <span class="profile-collection-group__count">{{ group.entries|length }}</span>
                 </div>
-            {% endfor %}
-            {{ knp_pagination_render(pagination) }}
-        </section>
+
+                <table class="profile-collection-table">
+                    <thead>
+                        <tr>
+                            <th class="profile-collection-table__th-title">Titre</th>
+                            <th class="profile-collection-table__th-score">Note</th>
+                            <th class="profile-collection-table__th-progress">Progression</th>
+                            <th class="profile-collection-table__th-platform">Plateforme</th>
+                            <th class="profile-collection-table__th-time">Temps</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in group.entries %}
+                            <tr class="profile-collection-table__row">
+                                <td class="profile-collection-table__cell-title">
+                                    <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}" class="profile-collection-table__game-link">
+                                        {% if entry.game.imageUrl %}
+                                            <img src="{{ entry.game.imageUrl }}" alt="" class="profile-collection-table__cover">
+                                        {% elseif entry.game.imageFilename %}
+                                            <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="" class="profile-collection-table__cover">
+                                        {% else %}
+                                            <div class="profile-collection-table__cover-placeholder"></div>
+                                        {% endif %}
+                                        <span>{{ entry.game.titre }}</span>
+                                    </a>
+                                </td>
+                                <td class="profile-collection-table__cell-score">
+                                    {% if entry.note %}
+                                        <span class="profile-collection-table__score">{{ entry.note }}</span>
+                                    {% else %}
+                                        <span class="profile-collection-table__score--empty">-</span>
+                                    {% endif %}
+                                </td>
+                                <td class="profile-collection-table__cell-progress">
+                                    {% if entry.progression %}
+                                        {{ entry.progression }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="profile-collection-table__cell-platform">
+                                    {{ entry.game.plateforme ?? '-' }}
+                                </td>
+                                <td class="profile-collection-table__cell-time">
+                                    {{ entry.tempsDeJeuFormatted }}
+                                </td>
+                            </tr>
+                            {% if entry.commentaire %}
+                                <tr class="profile-collection-table__comment-row">
+                                    <td colspan="5">
+                                        <div class="profile-collection-table__comment">
+                                            {{ entry.commentaire }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% endfor %}
     {% endif %}
 {% endblock %}

@@ -16,7 +16,7 @@ enum GameStatus: string
             self::EnCours => 'En cours',
             self::Termine => 'Terminé',
             self::EnPause => 'En pause',
-            self::Backlog => 'Backlog',
+            self::Backlog => 'A faire',
             self::Abandonne => 'Abandonné',
         };
     }

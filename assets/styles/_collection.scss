@@ -65,6 +65,18 @@
         border-left: 3px solid $color-info;
     }
 
+    &__comment {
+        margin-top: $spacing-sm;
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        font-style: italic;
+        line-height: 1.5;
+        padding: $spacing-sm $spacing-md;
+        background-color: rgba(255, 255, 255, 0.03);
+        border-radius: $radius-sm;
+        border-left: 3px solid $color-accent;
+    }
+
     &__actions {
         display: flex;
         gap: $spacing-sm;
