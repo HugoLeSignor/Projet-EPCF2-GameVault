@@ -48,6 +48,9 @@ class UserGameCollection
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isFavori = false;
+
     public function __construct()
     {
         $this->addedAt = new \DateTimeImmutable();
@@ -164,6 +167,17 @@ class UserGameCollection
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function isFavori(): bool
+    {
+        return $this->isFavori;
+    }
+
+    public function setIsFavori(bool $isFavori): static
+    {
+        $this->isFavori = $isFavori;
         return $this;
     }
 }

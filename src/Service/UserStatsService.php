@@ -39,9 +39,10 @@ class UserStatsService
             if ($entry->getNote() !== null) {
                 $ratingSum += $entry->getNote();
                 $ratingCount++;
-                if ($entry->getNote() >= 7) {
-                    $favorites[] = $entry;
-                }
+            }
+
+            if ($entry->isFavori()) {
+                $favorites[] = $entry;
             }
 
             if ($entry->getStatut() === GameStatus::EnCours) {
@@ -56,12 +57,7 @@ class UserStatsService
             $genreCounts[$genre] = ($genreCounts[$genre] ?? 0) + 1;
         }
 
-        // Sort favorites by rating desc, keep top 6
-        usort($favorites, fn($a, $b) => ($b->getNote() ?? 0) <=> ($a->getNote() ?? 0));
-        $favorites = array_slice($favorites, 0, 6);
-
-        // Keep only last 6 currently playing
-        $currentlyPlaying = array_slice($currentlyPlaying, 0, 6);
+        // currentlyPlaying is no longer used separately (shown in collection tables)
 
         $hours = intdiv($totalPlayTime, 60);
         $minutes = $totalPlayTime % 60;

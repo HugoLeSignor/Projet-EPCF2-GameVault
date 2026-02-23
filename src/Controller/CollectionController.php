@@ -133,6 +133,24 @@ class CollectionController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/toggle-favori', name: 'app_collection_toggle_favori', methods: ['POST'])]
+    public function toggleFavori(
+        UserGameCollection $entry,
+        Request $request,
+        EntityManagerInterface $em,
+    ): Response {
+        if ($entry->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($this->isCsrfTokenValid('favori' . $entry->getId(), $request->getPayload()->getString('_token'))) {
+            $entry->setIsFavori(!$entry->isFavori());
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('app_collection_index');
+    }
+
     #[Route('/{id}/delete', name: 'app_collection_delete', methods: ['POST'])]
     public function delete(
         UserGameCollection $entry,

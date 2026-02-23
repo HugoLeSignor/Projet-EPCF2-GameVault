@@ -63,6 +63,10 @@
                 </div>
 
                 <div class="collection-item__actions">
+                    <form action="{{ path('app_collection_toggle_favori', {id: entry.id}) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('favori' ~ entry.id) }}">
+                        <button type="submit" class="btn btn--sm {{ entry.isFavori ? 'btn--favori-active' : 'btn--outline' }}" title="{{ entry.isFavori ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">&#9829;</button>
+                    </form>
                     <a href="{{ path('app_collection_edit', {id: entry.id}) }}" class="btn btn--outline btn--sm">Modifier</a>
                     <form action="{{ path('app_collection_delete', {id: entry.id}) }}" method="post" style="display:inline;">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ entry.id) }}">
