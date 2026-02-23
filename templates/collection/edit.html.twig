@@ -12,7 +12,12 @@
         <p class="text-muted">{{ entry.game.plateforme }} - {{ entry.game.genre }}</p>
 
         {{ form_start(form) }}
-            {{ form_widget(form) }}
+            {{ form_row(form.plateforme) }}
+            {{ form_row(form.statut) }}
+            {{ form_row(form.note) }}
+            {{ form_row(form.tempsDeJeu) }}
+            {{ form_row(form.progression) }}
+            {{ form_row(form.commentaire) }}
             <div class="d-flex gap-sm mt-lg">
                 <button type="submit" class="btn btn--primary">Enregistrer</button>
                 <a href="{{ path('app_collection_index') }}" class="btn btn--outline">Annuler</a>
