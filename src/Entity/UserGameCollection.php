@@ -36,6 +36,9 @@ class UserGameCollection
     #[Assert\PositiveOrZero]
     private ?int $tempsDeJeu = null;
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $plateforme = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $commentaire = null;
 
@@ -124,6 +127,17 @@ class UserGameCollection
         $hours = intdiv($this->tempsDeJeu, 60);
         $minutes = $this->tempsDeJeu % 60;
         return sprintf('%dh %02dmin', $hours, $minutes);
+    }
+
+    public function getPlateforme(): ?string
+    {
+        return $this->plateforme;
+    }
+
+    public function setPlateforme(?string $plateforme): static
+    {
+        $this->plateforme = $plateforme;
+        return $this;
     }
 
     public function getCommentaire(): ?string

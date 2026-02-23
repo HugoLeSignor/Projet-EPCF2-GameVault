@@ -49,9 +49,9 @@ class UserSearchController extends AbstractController
         $statusOrder = [
             GameStatus::EnCours,
             GameStatus::Termine,
-            GameStatus::Abandonne,
-            GameStatus::Backlog,
             GameStatus::EnPause,
+            GameStatus::Backlog,
+            GameStatus::Abandonne,
         ];
 
         $collectionByStatus = [];

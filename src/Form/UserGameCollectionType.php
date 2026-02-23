@@ -13,9 +13,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserGameCollectionType extends AbstractType
 {
+    private const PLATFORMS = [
+        'PC', 'PS5', 'PS4', 'PS3', 'PS2', 'PS1',
+        'Xbox Series', 'Xbox One', 'Xbox 360',
+        'Switch', 'Switch 2', 'Wii U', 'Wii', '3DS',
+        'Mobile', 'Autre',
+    ];
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('plateforme', ChoiceType::class, [
+                'label' => 'Plateforme',
+                'choices' => array_combine(self::PLATFORMS, self::PLATFORMS),
+                'required' => false,
+                'placeholder' => 'Choisir une plateforme',
+            ])
             ->add('statut', ChoiceType::class, [
                 'label' => 'Statut',
                 'choices' => array_combine(

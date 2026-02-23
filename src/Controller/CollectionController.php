@@ -73,6 +73,7 @@ class CollectionController extends AbstractController
         $entry = new UserGameCollection();
         $entry->setUser($this->getUser());
         $entry->setGame($game);
+        $entry->setPlateforme($game->getPlateforme());
 
         $form = $this->createForm(UserGameCollectionType::class, $entry);
         $form->handleRequest($request);

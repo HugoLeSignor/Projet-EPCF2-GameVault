@@ -50,7 +50,7 @@ class UserStatsService
             }
 
             $game = $entry->getGame();
-            $platform = $game->getPlateforme();
+            $platform = $entry->getPlateforme() ?? $game->getPlateforme();
             $platformCounts[$platform] = ($platformCounts[$platform] ?? 0) + 1;
 
             $genre = $game->getGenre();

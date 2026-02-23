@@ -48,7 +48,7 @@
                     </h3>
                     <div class="collection-item__meta">
                         <span class="badge badge--{{ entry.statut.cssClass }}">{{ entry.statut.label }}</span>
-                        <span>{{ entry.game.plateforme }}</span>
+                        <span>{{ entry.plateforme ?? entry.game.plateforme }}</span>
                         <span>{{ entry.game.genre }}</span>
                         {% if entry.note %}
                             <span class="collection-item__rating">{{ entry.note }}/10</span>

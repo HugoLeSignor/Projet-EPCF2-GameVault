@@ -204,7 +204,7 @@
                                     {% endif %}
                                 </td>
                                 <td class="profile-collection-table__cell-platform">
-                                    {{ entry.game.plateforme ?? '-' }}
+                                    {{ entry.plateforme ?? entry.game.plateforme ?? '-' }}
                                 </td>
                                 <td class="profile-collection-table__cell-time">
                                     {{ entry.tempsDeJeuFormatted }}
