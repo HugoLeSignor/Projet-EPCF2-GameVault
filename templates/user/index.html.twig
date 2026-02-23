@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Communauté - GameVault{% endblock %}
+{% block title %}Communaute - GameVault{% endblock %}
 
 {% block body %}
     <div class="page-header">
-        <h1 class="page-header__title">{{ query ? 'Résultats pour "' ~ query ~ '"' : 'Communauté' }}</h1>
+        <h1 class="page-header__title">{{ query ? 'Resultats pour "' ~ query ~ '"' : 'Communaute' }}</h1>
     </div>
 
     <form method="get" action="{{ path('app_users') }}" class="igdb-search-form">
         <div class="d-flex gap-sm">
-            <input type="text" name="q" value="{{ query }}" placeholder="Rechercher un joueur..." class="form-input" style="flex: 1;" autofocus>
+            <input type="text" name="q" value="{{ query }}" placeholder="Rechercher un joueur..." class="form-input" style="flex: 1;">
             <button type="submit" class="btn btn--primary">Rechercher</button>
             {% if query %}
                 <a href="{{ path('app_users') }}" class="btn btn--outline">Reset</a>
@@ -17,31 +17,82 @@
         </div>
     </form>
 
-    {% if query and users|length == 0 %}
-        <div class="empty-state">
-            <div class="empty-state__icon">🔍</div>
-            <h3 class="empty-state__title">Aucun joueur trouvé</h3>
-            <p class="empty-state__text">Aucun utilisateur ne correspond à "{{ query }}".</p>
-        </div>
+    {# ── Search results ── #}
+    {% if query %}
+        {% if users|length > 0 %}
+            <div class="user-list">
+                {% for user in users %}
+                    <a href="{{ path('app_user_profile', {id: user.id}) }}" class="user-card">
+                        <div class="user-card__avatar">
+                            {% if user.avatarFilename %}
+                                <img src="{{ vich_uploader_asset(user, 'avatarFile') }}" alt="{{ user.pseudo }}">
+                            {% else %}
+                                <span>{{ user.pseudo|first|upper }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="user-card__info">
+                            <h3 class="user-card__name">{{ user.pseudo }}</h3>
+                            <p class="user-card__joined">Membre depuis {{ user.createdAt|date('d/m/Y') }}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state__icon">🔍</div>
+                <h3 class="empty-state__title">Aucun joueur trouve</h3>
+                <p class="empty-state__text">Aucun utilisateur ne correspond a "{{ query }}".</p>
+            </div>
+        {% endif %}
     {% endif %}
 
-    {% if users|length > 0 %}
-        <div class="user-list">
-            {% for user in users %}
-                <a href="{{ path('app_user_profile', {id: user.id}) }}" class="user-card">
-                    <div class="user-card__avatar">
-                        {% if user.avatarFilename %}
-                            <img src="{{ vich_uploader_asset(user, 'avatarFile') }}" alt="{{ user.pseudo }}">
-                        {% else %}
-                            <span>{{ user.pseudo|first|upper }}</span>
-                        {% endif %}
+    {# ── Latest reviews ── #}
+    {% if latestReviews|length > 0 %}
+        <section class="home-section">
+            <div class="home-section__header">
+                <h2 class="home-section__title">{{ query ? 'Derniers avis' : 'Derniers avis de la communaute' }}</h2>
+            </div>
+
+            {% for review in latestReviews %}
+                <div class="review-card">
+                    <div class="review-card__header">
+                        <div class="review-card__author">
+                            <a href="{{ path('app_user_profile', {id: review.user.id}) }}">
+                                {% if review.user.avatarFilename %}
+                                    <img src="{{ vich_uploader_asset(review.user, 'avatarFile') }}" alt="{{ review.user.pseudo }}" class="review-card__avatar">
+                                {% else %}
+                                    <div class="review-card__avatar-placeholder">
+                                        {{ review.user.pseudo|first|upper }}
+                                    </div>
+                                {% endif %}
+                            </a>
+                            <div>
+                                <a href="{{ path('app_user_profile', {id: review.user.id}) }}" class="review-card__name">{{ review.user.pseudo }}</a>
+                                <div class="review-card__date">
+                                    a propos de
+                                    <a href="{{ review.game.igdbId ? path('app_game_show', {igdbId: review.game.igdbId}) : path('app_game_show_local', {id: review.game.id}) }}" class="review-card__game-link">{{ review.game.titre }}</a>
+                                    &middot; {{ review.createdAt|date('d/m/Y') }}
+                                </div>
+                            </div>
+                        </div>
+                        {% include '_partials/_star_rating.html.twig' with {rating: review.note} %}
                     </div>
-                    <div class="user-card__info">
-                        <h3 class="user-card__name">{{ user.pseudo }}</h3>
-                        <p class="user-card__joined">Membre depuis {{ user.createdAt|date('d/m/Y') }}</p>
+                    <div class="review-card__content">
+                        {{ review.contenu|length > 300 ? review.contenu|slice(0, 300) ~ '...' : review.contenu }}
                     </div>
-                </a>
+                    <div class="review-card__footer">
+                        <a href="{{ review.game.igdbId ? path('app_game_show', {igdbId: review.game.igdbId}) : path('app_game_show_local', {id: review.game.id}) }}" class="btn btn--outline btn--sm">Voir le jeu</a>
+                    </div>
+                </div>
             {% endfor %}
-        </div>
+        </section>
+    {% else %}
+        {% if not query %}
+            <div class="empty-state">
+                <div class="empty-state__icon">💬</div>
+                <h3 class="empty-state__title">Aucun avis pour le moment</h3>
+                <p class="empty-state__text">Soyez le premier a laisser un avis !</p>
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}

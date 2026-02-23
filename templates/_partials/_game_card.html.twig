@@ -1,5 +1,5 @@
 <div class="game-card">
-    <a href="{{ path('app_game_show', {igdbId: game.igdbId}) }}">
+    <a href="{{ game.igdbId ? path('app_game_show', {igdbId: game.igdbId}) : path('app_game_show_local', {id: game.id}) }}">
         {% if game.imageFilename %}
             <img src="{{ vich_uploader_asset(game, 'imageFile') }}" alt="{{ game.titre }}" class="game-card__image">
         {% elseif game.imageUrl %}
@@ -10,7 +10,7 @@
     </a>
     <div class="game-card__body">
         <h3 class="game-card__title">
-            <a href="{{ path('app_game_show', {igdbId: game.igdbId}) }}">{{ game.titre }}</a>
+            <a href="{{ game.igdbId ? path('app_game_show', {igdbId: game.igdbId}) : path('app_game_show_local', {id: game.id}) }}">{{ game.titre }}</a>
         </h3>
         <div class="game-card__meta">
             <span class="game-card__tag">{{ game.plateforme }}</span>

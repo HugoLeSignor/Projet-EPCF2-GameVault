@@ -7,6 +7,7 @@ use App\Entity\UserGameCollection;
 use App\Form\GameFilterType;
 use App\Form\UserGameCollectionType;
 use App\Repository\UserGameCollectionRepository;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -58,6 +59,7 @@ class CollectionController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         UserGameCollectionRepository $collectionRepo,
+        NotificationService $notifService,
     ): Response {
         $existing = $collectionRepo->findOneBy([
             'user' => $this->getUser(),
@@ -79,6 +81,13 @@ class CollectionController extends AbstractController
             $em->persist($entry);
             $em->flush();
 
+            $notifService->notifyFollowers(
+                $this->getUser(),
+                'collection_add',
+                $game,
+                'a ajoute a sa collection'
+            );
+
             $this->addFlash('success', sprintf('"%s" ajouté à votre collection !', $game->getTitre()));
             return $this->redirectToRoute('app_collection_index');
         }
@@ -94,6 +103,7 @@ class CollectionController extends AbstractController
         UserGameCollection $entry,
         Request $request,
         EntityManagerInterface $em,
+        NotificationService $notifService,
     ): Response {
         if ($entry->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
@@ -105,6 +115,13 @@ class CollectionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entry->setUpdatedAt(new \DateTimeImmutable());
             $em->flush();
+
+            $notifService->notifyFollowers(
+                $this->getUser(),
+                'collection_update',
+                $entry->getGame(),
+                'a mis a jour ' . $entry->getStatut()->label() . ' :'
+            );
 
             $this->addFlash('success', 'Collection mise à jour.');
             return $this->redirectToRoute('app_collection_index');

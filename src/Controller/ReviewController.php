@@ -6,6 +6,7 @@ use App\Entity\Game;
 use App\Entity\Review;
 use App\Form\ReviewType;
 use App\Repository\ReviewRepository;
+use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,7 @@ class ReviewController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         ReviewRepository $reviewRepo,
+        NotificationService $notifService,
     ): Response {
         $existing = $reviewRepo->findOneBy([
             'user' => $this->getUser(),
@@ -30,7 +32,7 @@ class ReviewController extends AbstractController
         ]);
         if ($existing) {
             $this->addFlash('warning', 'Vous avez déjà laissé un avis pour ce jeu.');
-            return $this->redirectToRoute('app_game_show', ['igdbId' => $game->getIgdbId()]);
+            return $this->redirectToGame($game);
         }
 
         $review = new Review();
@@ -44,8 +46,15 @@ class ReviewController extends AbstractController
             $em->persist($review);
             $em->flush();
 
+            $notifService->notifyFollowers(
+                $this->getUser(),
+                'review_new',
+                $game,
+                'a laisse un avis sur'
+            );
+
             $this->addFlash('success', 'Votre avis a été soumis et sera visible après modération.');
-            return $this->redirectToRoute('app_game_show', ['igdbId' => $game->getIgdbId()]);
+            return $this->redirectToGame($game);
         }
 
         return $this->render('review/new.html.twig', [
@@ -73,7 +82,7 @@ class ReviewController extends AbstractController
             $em->flush();
 
             $this->addFlash('success', 'Votre avis a été modifié et sera re-vérifié.');
-            return $this->redirectToRoute('app_game_show', ['igdbId' => $review->getGame()->getIgdbId()]);
+            return $this->redirectToGame($review->getGame());
         }
 
         return $this->render('review/edit.html.twig', [
@@ -93,13 +102,21 @@ class ReviewController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete' . $review->getId(), $request->getPayload()->getString('_token'))) {
-            $igdbId = $review->getGame()->getIgdbId();
+            $game = $review->getGame();
             $em->remove($review);
             $em->flush();
             $this->addFlash('success', 'Avis supprimé.');
-            return $this->redirectToRoute('app_game_show', ['igdbId' => $igdbId]);
+            return $this->redirectToGame($game);
         }
 
-        return $this->redirectToRoute('app_game_show', ['igdbId' => $review->getGame()->getIgdbId()]);
+        return $this->redirectToGame($review->getGame());
+    }
+
+    private function redirectToGame(Game $game): Response
+    {
+        if ($game->getIgdbId()) {
+            return $this->redirectToRoute('app_game_show', ['igdbId' => $game->getIgdbId()]);
+        }
+        return $this->redirectToRoute('app_game_show_local', ['id' => $game->getId()]);
     }
 }

@@ -55,7 +55,7 @@ class UserStatsService
         }
 
         // Sort favorites by rating desc, keep top 6
-        usort($favorites, fn($a, $b) => $b->getNote() <=> $a->getNote());
+        usort($favorites, fn($a, $b) => ($b->getNote() ?? 0) <=> ($a->getNote() ?? 0));
         $favorites = array_slice($favorites, 0, 6);
 
         // Keep only last 6 currently playing

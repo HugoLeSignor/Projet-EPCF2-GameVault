@@ -47,6 +47,16 @@
         color: $color-text-muted;
     }
 
+    &__game-link {
+        color: $color-accent;
+        font-weight: 500;
+
+        &:hover {
+            color: $color-accent-hover;
+            text-decoration: underline;
+        }
+    }
+
     &__content {
         color: $color-text-secondary;
         line-height: 1.7;

@@ -20,6 +20,23 @@ class ReviewRepository extends ServiceEntityRepository
     /**
      * @return Review[]
      */
+    public function findLatestApproved(int $limit = 20): array
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.user', 'u')
+            ->addSelect('u')
+            ->join('r.game', 'g')
+            ->addSelect('g')
+            ->where('r.isApproved = true')
+            ->orderBy('r.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Review[]
+     */
     public function findApprovedByGame(Game $game): array
     {
         return $this->createQueryBuilder('r')

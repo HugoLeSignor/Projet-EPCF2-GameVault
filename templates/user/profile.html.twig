@@ -23,6 +23,20 @@
         <div class="profile-hero__info">
             <div class="profile-hero__top">
                 <h1 class="profile-hero__name">{{ profileUser.pseudo }}</h1>
+                {% if app.user and app.user != profileUser %}
+                    <form action="{{ path('app_user_follow', {id: profileUser.id}) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('follow' ~ profileUser.id) }}">
+                        {% if isFollowing %}
+                            <button type="submit" class="btn btn--outline btn--sm">Ne plus suivre</button>
+                        {% else %}
+                            <button type="submit" class="btn btn--primary btn--sm">Suivre</button>
+                        {% endif %}
+                    </form>
+                {% endif %}
+            </div>
+            <div class="profile-hero__follow-stats">
+                <span><strong>{{ followersCount }}</strong> abonne{{ followersCount > 1 ? 's' : '' }}</span>
+                <span><strong>{{ followingCount }}</strong> abonnement{{ followingCount > 1 ? 's' : '' }}</span>
             </div>
             {% if profileUser.bio %}
                 <p class="profile-hero__bio">{{ profileUser.bio }}</p>
@@ -87,7 +101,7 @@
             <h2 class="profile-section__title">En cours</h2>
             <div class="profile-cards">
                 {% for entry in stats.currentlyPlaying %}
-                    <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}" class="profile-game-card">
+                    <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}" class="profile-game-card">
                         {% if entry.game.imageUrl %}
                             <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
                         {% elseif entry.game.imageFilename %}
@@ -113,7 +127,7 @@
             <h2 class="profile-section__title">Favoris</h2>
             <div class="profile-cards profile-cards--wide">
                 {% for entry in stats.favorites %}
-                    <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}" class="profile-game-card">
+                    <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}" class="profile-game-card">
                         {% if entry.game.imageUrl %}
                             <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
                         {% elseif entry.game.imageFilename %}
@@ -182,7 +196,7 @@
 
                     <div class="collection-item__info">
                         <h3 class="collection-item__title">
-                            <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}">{{ entry.game.titre }}</a>
+                            <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}">{{ entry.game.titre }}</a>
                         </h3>
                         <div class="collection-item__meta">
                             <span class="badge badge--{{ entry.statut.cssClass }}">{{ entry.statut.label }}</span>

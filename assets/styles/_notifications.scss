@@ -1,0 +1,83 @@
+// ── Notification List ──
+.notif-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+}
+
+.notif-item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-md $spacing-lg;
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    border-left: 3px solid transparent;
+    transition: $transition-base;
+
+    &--unread {
+        border-left-color: $color-accent;
+        background-color: lighten($color-bg-card, 3%);
+    }
+
+    &__icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: $radius-md;
+    }
+
+    &__content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    &__message {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        line-height: 1.5;
+    }
+
+    &__actor {
+        color: $color-text-primary;
+        font-weight: 600;
+
+        &:hover {
+            color: $color-accent;
+        }
+    }
+
+    &__game {
+        color: $color-accent;
+        font-weight: 500;
+
+        &:hover {
+            color: $color-accent-hover;
+            text-decoration: underline;
+        }
+    }
+
+    &__date {
+        display: block;
+        font-size: 0.75rem;
+        color: $color-text-muted;
+        margin-top: 2px;
+    }
+}
+
+@media (max-width: $breakpoint-sm) {
+    .notif-item {
+        padding: $spacing-sm $spacing-md;
+
+        &__icon {
+            width: 32px;
+            height: 32px;
+            font-size: 1.2rem;
+        }
+    }
+}

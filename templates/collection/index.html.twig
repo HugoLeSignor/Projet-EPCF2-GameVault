@@ -44,7 +44,7 @@
 
                 <div class="collection-item__info">
                     <h3 class="collection-item__title">
-                        <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}">{{ entry.game.titre }}</a>
+                        <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}">{{ entry.game.titre }}</a>
                     </h3>
                     <div class="collection-item__meta">
                         <span class="badge badge--{{ entry.statut.cssClass }}">{{ entry.statut.label }}</span>

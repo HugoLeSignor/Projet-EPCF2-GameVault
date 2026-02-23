@@ -62,6 +62,9 @@ class IgdbService
         'Switch 2' => [612],           // Nintendo Switch 2
     ];
 
+    // IGDB theme IDs to exclude (adult/NSFW content)
+    private const EXCLUDED_THEMES = [42]; // 42 = Erotic
+
     private const PLATFORM_MAP = [
         'PC (Microsoft Windows)' => 'PC',
         'PlayStation 5' => 'PS5',
@@ -118,11 +121,17 @@ class IgdbService
 
     public function searchGames(string $query, ?string $genre = null, ?string $platform = null, int $limit = 20): array
     {
-        $where = $this->buildWhereClause($genre, $platform);
+        $conditions = [$this->getNsfwFilter()];
+        $genrePlatformWhere = $this->buildWhereClause($genre, $platform);
+        if ($genrePlatformWhere) {
+            $conditions[] = $genrePlatformWhere;
+        }
+        $where = implode(' & ', $conditions);
+
         $body = sprintf(
-            'search "%s"; fields name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher;%s limit %d;',
+            'search "%s"; fields name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; where %s; limit %d;',
             addslashes($query),
-            $where ? ' where ' . $where . ';' : '',
+            $where,
             $limit
         );
 
@@ -133,7 +142,7 @@ class IgdbService
 
     public function getPopularGames(?string $genre = null, ?string $platform = null, int $limit = 24): array
     {
-        $conditions = ['total_rating_count > 50', 'cover != null'];
+        $conditions = ['total_rating_count > 50', 'cover != null', $this->getNsfwFilter()];
         $genrePlatformWhere = $this->buildWhereClause($genre, $platform);
         if ($genrePlatformWhere) {
             $conditions[] = $genrePlatformWhere;
@@ -142,6 +151,24 @@ class IgdbService
         $body = sprintf(
             'fields name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; sort total_rating_count desc; where %s; limit %d;',
             implode(' & ', $conditions),
+            $limit
+        );
+
+        $results = $this->apiRequest('games', $body);
+
+        return array_map(fn(array $game) => $this->formatGameResult($game), $results);
+    }
+
+    public function getRecentReleases(int $limit = 8): array
+    {
+        $threeMonthsAgo = time() - (90 * 24 * 60 * 60);
+        $now = time();
+
+        $body = sprintf(
+            'fields name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; sort first_release_date desc; where first_release_date >= %d & first_release_date <= %d & cover != null & total_rating_count > 5 & %s; limit %d;',
+            $threeMonthsAgo,
+            $now,
+            $this->getNsfwFilter(),
             $limit
         );
 
@@ -241,6 +268,11 @@ class IgdbService
             'publisher' => $publisher,
             'releaseDate' => $releaseDate,
         ];
+    }
+
+    private function getNsfwFilter(): string
+    {
+        return 'themes != (' . implode(',', self::EXCLUDED_THEMES) . ')';
     }
 
     public function getCoverUrl(string $imageId, string $size = 'cover_big'): string

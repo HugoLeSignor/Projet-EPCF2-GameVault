@@ -75,10 +75,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $reviews;
 
+    /** @var Collection<int, UserFollow> */
+    #[ORM\OneToMany(targetEntity: UserFollow::class, mappedBy: 'following', orphanRemoval: true)]
+    private Collection $followers;
+
+    /** @var Collection<int, UserFollow> */
+    #[ORM\OneToMany(targetEntity: UserFollow::class, mappedBy: 'follower', orphanRemoval: true)]
+    private Collection $following;
+
+    /** @var Collection<int, Notification> */
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'recipient', orphanRemoval: true)]
+    private Collection $notifications;
+
     public function __construct()
     {
         $this->gameCollections = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+        $this->followers = new ArrayCollection();
+        $this->following = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -237,5 +252,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getReviews(): Collection
     {
         return $this->reviews;
+    }
+
+    /** @return Collection<int, UserFollow> */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    /** @return Collection<int, UserFollow> */
+    public function getFollowing(): Collection
+    {
+        return $this->following;
+    }
+
+    /** @return Collection<int, Notification> */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
     }
 }

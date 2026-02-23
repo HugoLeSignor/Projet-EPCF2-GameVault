@@ -14,7 +14,7 @@
             {{ form_widget(form) }}
             <div class="d-flex gap-sm mt-lg">
                 <button type="submit" class="btn btn--primary">Enregistrer</button>
-                <a href="{{ path('app_game_show', {igdbId: review.game.igdbId}) }}" class="btn btn--outline">Annuler</a>
+                <a href="{{ review.game.igdbId ? path('app_game_show', {igdbId: review.game.igdbId}) : path('app_game_show_local', {id: review.game.id}) }}" class="btn btn--outline">Annuler</a>
             </div>
         {{ form_end(form) }}
     </div>

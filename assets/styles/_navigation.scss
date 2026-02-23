@@ -67,6 +67,37 @@
         font-size: $font-size-sm;
         margin-right: $spacing-sm;
     }
+
+    &__notif {
+        position: relative;
+        font-size: 1.2rem;
+        line-height: 1;
+        padding: $spacing-xs;
+        border-radius: $radius-sm;
+        transition: $transition-base;
+        text-decoration: none;
+
+        &:hover,
+        &--active {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    }
+
+    &__badge {
+        position: absolute;
+        top: -4px;
+        right: -6px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        line-height: 18px;
+        text-align: center;
+        color: #fff;
+        background-color: $color-accent;
+        border-radius: $radius-pill;
+    }
 }
 
 // Admin sidebar

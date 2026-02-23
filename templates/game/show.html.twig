@@ -44,7 +44,7 @@
                     {% if inCollection %}
                         <a href="{{ path('app_collection_edit', {id: inCollection.id}) }}" class="btn btn--outline">Modifier dans ma collection</a>
                     {% else %}
-                        <a href="{{ path('app_collection_add', {id: game.id}) }}" class="btn btn--primary">Ajouter a ma collection</a>
+                        <a href="{{ path('app_collection_add', {id: game.id}) }}" class="btn btn--primary">Ajouter à ma collection</a>
                     {% endif %}
                     <a href="{{ path('app_review_new', {id: game.id}) }}" class="btn btn--outline">Laisser un avis</a>
                 {% endif %}

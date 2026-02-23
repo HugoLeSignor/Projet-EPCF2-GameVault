@@ -1,0 +1,126 @@
+// ── Hero Section ──
+.hero {
+    text-align: center;
+    padding: $spacing-xxl 0;
+    margin-bottom: $spacing-xl;
+
+    &__title {
+        font-family: $font-family-heading;
+        font-size: 2.8rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: $spacing-md;
+    }
+
+    &__accent {
+        color: $color-accent;
+    }
+
+    &__subtitle {
+        color: $color-text-secondary;
+        font-size: $font-size-lg;
+        margin-bottom: $spacing-xl;
+    }
+
+    &__search {
+        display: flex;
+        max-width: 560px;
+        margin: 0 auto;
+        gap: $spacing-sm;
+    }
+
+    &__input {
+        flex: 1;
+        padding: $spacing-md $spacing-lg;
+        background: $color-bg-secondary;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: $radius-md;
+        color: $color-text-primary;
+        font-size: $font-size-base;
+        transition: $transition-base;
+
+        &::placeholder {
+            color: $color-text-muted;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: $color-accent;
+            box-shadow: 0 0 0 3px rgba($color-accent, 0.15);
+        }
+    }
+}
+
+// ── Home Sections ──
+.home-section {
+    margin-bottom: $spacing-xxl;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__title {
+        font-family: $font-family-heading;
+        font-size: $font-size-xl;
+        font-weight: 600;
+        margin: 0;
+    }
+}
+
+// ── Genre Grid ──
+.genre-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-md;
+}
+
+.genre-card {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-md $spacing-lg;
+    background: $color-bg-card;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: $radius-md;
+    color: $color-text-primary;
+    text-decoration: none;
+    transition: $transition-base;
+
+    &:hover {
+        border-color: $color-accent;
+        background: lighten($color-bg-card, 3%);
+        transform: translateY(-2px);
+    }
+
+    &__emoji {
+        font-size: 1.5rem;
+    }
+
+    &__name {
+        font-weight: 500;
+        font-size: $font-size-base;
+    }
+}
+
+// ── CTA Section ──
+.home-cta {
+    text-align: center;
+    padding: $spacing-xxl;
+    background: $color-bg-secondary;
+    border-radius: $radius-lg;
+    margin-bottom: $spacing-xxl;
+
+    h2 {
+        font-family: $font-family-heading;
+        font-size: $font-size-xxl;
+        margin-bottom: $spacing-sm;
+    }
+
+    p {
+        color: $color-text-secondary;
+        margin-bottom: $spacing-lg;
+    }
+}

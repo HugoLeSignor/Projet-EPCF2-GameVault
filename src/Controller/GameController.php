@@ -104,6 +104,23 @@ class GameController extends AbstractController
             $em->flush();
         }
 
+        return $this->renderGameShow($game, $reviewRepository, $collectionRepo);
+    }
+
+    #[Route('/game/local/{id}', name: 'app_game_show_local', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function showLocal(
+        Game $game,
+        ReviewRepository $reviewRepository,
+        UserGameCollectionRepository $collectionRepo,
+    ): Response {
+        return $this->renderGameShow($game, $reviewRepository, $collectionRepo);
+    }
+
+    private function renderGameShow(
+        Game $game,
+        ReviewRepository $reviewRepository,
+        UserGameCollectionRepository $collectionRepo,
+    ): Response {
         $reviews = $reviewRepository->findApprovedByGame($game);
         $inCollection = null;
 

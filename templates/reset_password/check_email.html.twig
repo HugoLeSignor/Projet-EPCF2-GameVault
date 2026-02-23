@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Email envoyé - GameVault{% endblock %}
+
+{% block body %}
+    <div class="auth-form">
+        <div class="auth-form__card">
+            <h1 class="auth-form__title">Email envoyé !</h1>
+
+            <p class="auth-form__description">
+                Si un compte existe avec cette adresse email, un lien de réinitialisation vous a été envoyé.
+                Ce lien expire dans <strong>{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
+            </p>
+
+            <p class="auth-form__description">
+                Si vous ne recevez pas l'email, vérifiez votre dossier spam ou <a href="{{ path('app_forgot_password_request') }}">réessayez</a>.
+            </p>
+
+            <div class="auth-form__footer">
+                <p><a href="{{ path('app_login') }}">Retour à la connexion</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notifications - GameVault{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1 class="page-header__title">Notifications</h1>
+        <div class="page-header__actions">
+            {% if notifications|length > 0 %}
+                <form action="{{ path('app_notification_read_all') }}" method="post" style="display:inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('read_all') }}">
+                    <button type="submit" class="btn btn--outline btn--sm">Tout marquer comme lu</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if notifications|length > 0 %}
+        <div class="notif-list">
+            {% for notif in notifications %}
+                <div class="notif-item{{ not notif.read ? ' notif-item--unread' : '' }}">
+                    <div class="notif-item__icon">
+                        {% if notif.type == 'collection_add' %}
+                            🎮
+                        {% elseif notif.type == 'collection_update' %}
+                            📝
+                        {% elseif notif.type == 'review_new' %}
+                            ⭐
+                        {% else %}
+                            🔔
+                        {% endif %}
+                    </div>
+                    <div class="notif-item__content">
+                        <p class="notif-item__message">
+                            <a href="{{ path('app_user_profile', {id: notif.actor.id}) }}" class="notif-item__actor">{{ notif.actor.pseudo }}</a>
+                            {{ notif.message }}
+                            {% if notif.game %}
+                                <a href="{{ notif.game.igdbId ? path('app_game_show', {igdbId: notif.game.igdbId}) : path('app_game_show_local', {id: notif.game.id}) }}" class="notif-item__game">{{ notif.game.titre }}</a>
+                            {% endif %}
+                        </p>
+                        <span class="notif-item__date">{{ notif.createdAt|date('d/m/Y H:i') }}</span>
+                    </div>
+                    {% if not notif.read %}
+                        <form action="{{ path('app_notification_read', {id: notif.id}) }}" method="post">
+                            <button type="submit" class="btn btn--outline btn--sm" title="Marquer comme lu">✓</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">🔔</div>
+            <h3 class="empty-state__title">Aucune notification</h3>
+            <p class="empty-state__text">Suivez des joueurs pour recevoir des notifications quand ils mettent a jour leur collection.</p>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -88,7 +88,7 @@
             <h2 class="profile-section__title">En cours</h2>
             <div class="profile-cards">
                 {% for entry in stats.currentlyPlaying %}
-                    <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}" class="profile-game-card">
+                    <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}" class="profile-game-card">
                         {% if entry.game.imageUrl %}
                             <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
                         {% elseif entry.game.imageFilename %}
@@ -114,7 +114,7 @@
             <h2 class="profile-section__title">Favoris</h2>
             <div class="profile-cards profile-cards--wide">
                 {% for entry in stats.favorites %}
-                    <a href="{{ path('app_game_show', {igdbId: entry.game.igdbId}) }}" class="profile-game-card">
+                    <a href="{{ entry.game.igdbId ? path('app_game_show', {igdbId: entry.game.igdbId}) : path('app_game_show_local', {id: entry.game.id}) }}" class="profile-game-card">
                         {% if entry.game.imageUrl %}
                             <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
                         {% elseif entry.game.imageFilename %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialiser le mot de passe - GameVault{% endblock %}
+
+{% block body %}
+    <div class="auth-form">
+        <div class="auth-form__card">
+            <h1 class="auth-form__title">Nouveau mot de passe</h1>
+
+            {{ form_start(resetForm) }}
+                {{ form_row(resetForm.plainPassword.first) }}
+                {{ form_row(resetForm.plainPassword.second) }}
+
+                <button type="submit" class="btn btn--primary btn--block">Réinitialiser le mot de passe</button>
+            {{ form_end(resetForm) }}
+
+            <div class="auth-form__footer">
+                <p><a href="{{ path('app_login') }}">Retour à la connexion</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

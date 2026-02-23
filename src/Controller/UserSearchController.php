@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\ReviewRepository;
+use App\Repository\UserFollowRepository;
 use App\Repository\UserGameCollectionRepository;
 use App\Repository\UserRepository;
 use App\Service\UserStatsService;
@@ -15,20 +17,21 @@ use Symfony\Component\Routing\Attribute\Route;
 class UserSearchController extends AbstractController
 {
     #[Route('/users', name: 'app_users', methods: ['GET'])]
-    public function index(Request $request, UserRepository $userRepo): Response
+    public function index(Request $request, UserRepository $userRepo, ReviewRepository $reviewRepo): Response
     {
         $query = $request->query->getString('q');
         $users = [];
 
         if ($query) {
             $users = $userRepo->searchByPseudo($query);
-        } else {
-            $users = $userRepo->findBy([], ['createdAt' => 'DESC'], 20);
         }
+
+        $latestReviews = $reviewRepo->findLatestApproved(20);
 
         return $this->render('user/index.html.twig', [
             'query' => $query,
             'users' => $users,
+            'latestReviews' => $latestReviews,
         ]);
     }
 
@@ -37,6 +40,7 @@ class UserSearchController extends AbstractController
         User $user,
         UserStatsService $statsService,
         UserGameCollectionRepository $collectionRepo,
+        UserFollowRepository $followRepo,
         PaginatorInterface $paginator,
         Request $request,
     ): Response {
@@ -49,10 +53,18 @@ class UserSearchController extends AbstractController
             20,
         );
 
+        $isFollowing = false;
+        if ($this->getUser() && $this->getUser() !== $user) {
+            $isFollowing = $followRepo->isFollowing($this->getUser(), $user);
+        }
+
         return $this->render('user/profile.html.twig', [
             'profileUser' => $user,
             'stats' => $stats,
             'pagination' => $pagination,
+            'isFollowing' => $isFollowing,
+            'followersCount' => $followRepo->countFollowers($user),
+            'followingCount' => $followRepo->countFollowing($user),
         ]);
     }
 }

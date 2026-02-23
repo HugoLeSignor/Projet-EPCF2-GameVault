@@ -95,6 +95,19 @@ $status-abandonne: #e74c3c;
         line-height: 1.5;
     }
 
+    &__follow-stats {
+        display: flex;
+        gap: $spacing-lg;
+        margin-top: $spacing-xs;
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+
+        strong {
+            color: $color-text-primary;
+            font-weight: 600;
+        }
+    }
+
     &__joined {
         margin-top: $spacing-xs;
         font-size: $font-size-sm;

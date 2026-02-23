@@ -16,6 +16,12 @@
 
         <div class="navbar__auth">
             {% if app.user %}
+                <a href="{{ path('app_notifications') }}" class="navbar__notif{% if app.request.attributes.get('_route') starts with 'app_notification' %} navbar__notif--active{% endif %}" title="Notifications">
+                    🔔
+                    {% if unreadNotifCount is defined and unreadNotifCount > 0 %}
+                        <span class="navbar__badge">{{ unreadNotifCount }}</span>
+                    {% endif %}
+                </a>
                 <span class="navbar__user">{{ app.user.pseudo }}</span>
                 <a href="{{ path('app_logout') }}" class="btn btn--outline btn--sm">Deconnexion</a>
             {% else %}
