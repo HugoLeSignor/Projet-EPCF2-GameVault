@@ -169,7 +169,6 @@
                         <tr>
                             <th class="profile-collection-table__th-title">Titre</th>
                             <th class="profile-collection-table__th-score">Note</th>
-                            <th class="profile-collection-table__th-progress">Progression</th>
                             <th class="profile-collection-table__th-platform">Plateforme</th>
                             <th class="profile-collection-table__th-time">Temps</th>
                         </tr>
@@ -196,13 +195,6 @@
                                         <span class="profile-collection-table__score--empty">-</span>
                                     {% endif %}
                                 </td>
-                                <td class="profile-collection-table__cell-progress">
-                                    {% if entry.progression %}
-                                        {{ entry.progression }}
-                                    {% else %}
-                                        -
-                                    {% endif %}
-                                </td>
                                 <td class="profile-collection-table__cell-platform">
                                     {{ entry.plateforme ?? entry.game.plateforme ?? '-' }}
                                 </td>
@@ -212,7 +204,7 @@
                             </tr>
                             {% if entry.commentaire %}
                                 <tr class="profile-collection-table__comment-row">
-                                    <td colspan="5">
+                                    <td colspan="4">
                                         <div class="profile-collection-table__comment">
                                             {{ entry.commentaire }}
                                         </div>
