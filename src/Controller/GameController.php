@@ -88,7 +88,7 @@ class GameController extends AbstractController
             $game->setTitre($data['name']);
             $game->setDescription($data['summary']);
             $game->setGenre($data['genre']);
-            $game->setPlateforme($data['platform']);
+            $game->setPlateforme(implode(', ', $data['platforms']));
             $game->setDeveloppeur($data['developer']);
             $game->setEditeur($data['publisher']);
             $game->setIgdbId($igdbId);
@@ -102,6 +102,13 @@ class GameController extends AbstractController
 
             $em->persist($game);
             $em->flush();
+        } elseif (!str_contains($game->getPlateforme(), ', ')) {
+            // Mettre à jour les plateformes des jeux importés avant le multi-plateforme
+            $data = $igdbService->getGameById($igdbId);
+            if ($data && count($data['platforms']) > 1) {
+                $game->setPlateforme(implode(', ', $data['platforms']));
+                $em->flush();
+            }
         }
 
         return $this->renderGameShow($game, $reviewRepository, $collectionRepo);

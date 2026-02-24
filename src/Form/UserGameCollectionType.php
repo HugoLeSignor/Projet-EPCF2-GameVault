@@ -15,21 +15,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserGameCollectionType extends AbstractType
 {
-    private const PLATFORMS = [
-        'PC', 'PS5', 'PS4', 'PS3', 'PS2', 'PS1',
-        'Xbox Series', 'Xbox One', 'Xbox 360',
-        'Switch', 'Switch 2', 'Wii U', 'Wii', '3DS',
-        'Mobile', 'Autre',
-    ];
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $platforms = $options['game_platforms'];
+        $platformChoices = array_combine($platforms, $platforms);
+
         $builder
             ->add('plateforme', ChoiceType::class, [
                 'label' => 'Plateforme',
-                'choices' => array_combine(self::PLATFORMS, self::PLATFORMS),
+                'choices' => $platformChoices,
                 'required' => false,
-                'placeholder' => 'Choisir une plateforme',
+                'placeholder' => count($platforms) > 1 ? 'Choisir une plateforme' : null,
             ])
             ->add('statut', ChoiceType::class, [
                 'label' => 'Statut',
@@ -105,6 +101,9 @@ class UserGameCollectionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => UserGameCollection::class,
+            'game_platforms' => ['PC'],
         ]);
+
+        $resolver->setAllowedTypes('game_platforms', 'array');
     }
 }

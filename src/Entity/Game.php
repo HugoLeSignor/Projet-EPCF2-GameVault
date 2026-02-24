@@ -38,7 +38,7 @@ class Game
     #[Assert\NotBlank]
     private ?string $genre = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
     private ?string $plateforme = null;
 
@@ -150,6 +150,15 @@ class Game
     {
         $this->plateforme = $plateforme;
         return $this;
+    }
+
+    /** @return string[] */
+    public function getPlateformes(): array
+    {
+        if (!$this->plateforme) {
+            return [];
+        }
+        return array_map('trim', explode(', ', $this->plateforme));
     }
 
     public function getDateDeSortie(): ?\DateTimeImmutable

@@ -67,16 +67,30 @@ class IgdbService
 
     private const PLATFORM_MAP = [
         'PC (Microsoft Windows)' => 'PC',
-        'PlayStation 5' => 'PS5',
-        'PlayStation 4' => 'PS4',
-        'Xbox Series X|S' => 'Xbox Series',
-        'Xbox One' => 'Xbox One',
-        'Nintendo Switch' => 'Switch',
         'Mac' => 'PC',
         'Linux' => 'PC',
-        'PlayStation 3' => 'PS4',
-        'Xbox 360' => 'Xbox One',
+        'PlayStation 5' => 'PS5',
+        'PlayStation 4' => 'PS4',
+        'PlayStation 3' => 'PS3',
+        'PlayStation 2' => 'PS2',
+        'PlayStation' => 'PS1',
+        'PlayStation Vita' => 'PS Vita',
+        'PlayStation Portable' => 'PSP',
+        'Xbox Series X|S' => 'Xbox Series',
+        'Xbox One' => 'Xbox One',
+        'Xbox 360' => 'Xbox 360',
+        'Xbox' => 'Xbox',
+        'Nintendo Switch' => 'Switch',
         'Nintendo Switch 2' => 'Switch 2',
+        'Wii U' => 'Wii U',
+        'Wii' => 'Wii',
+        'Nintendo 3DS' => '3DS',
+        'Nintendo DS' => 'DS',
+        'Nintendo 64' => 'N64',
+        'Game Boy Advance' => 'GBA',
+        'Nintendo GameCube' => 'GameCube',
+        'Android' => 'Mobile',
+        'iOS' => 'Mobile',
     ];
 
     public function __construct(
@@ -241,15 +255,17 @@ class IgdbService
             }
         }
 
-        $platform = null;
+        $platforms = [];
         if (isset($game['platforms'])) {
             foreach ($game['platforms'] as $p) {
-                $platform = self::PLATFORM_MAP[$p['name']] ?? null;
-                if ($platform) break;
+                $mapped = self::PLATFORM_MAP[$p['name']] ?? null;
+                if ($mapped && !in_array($mapped, $platforms, true)) {
+                    $platforms[] = $mapped;
+                }
             }
-            if (!$platform) {
-                $platform = 'PC';
-            }
+        }
+        if (empty($platforms)) {
+            $platforms = ['PC'];
         }
 
         $releaseDate = null;
@@ -263,7 +279,8 @@ class IgdbService
             'summary' => $game['summary'] ?? null,
             'coverUrl' => $coverUrl,
             'genre' => $genre ?? 'Action',
-            'platform' => $platform ?? 'PC',
+            'platform' => $platforms[0],
+            'platforms' => $platforms,
             'developer' => $developer,
             'publisher' => $publisher,
             'releaseDate' => $releaseDate,

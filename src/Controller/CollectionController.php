@@ -73,9 +73,13 @@ class CollectionController extends AbstractController
         $entry = new UserGameCollection();
         $entry->setUser($this->getUser());
         $entry->setGame($game);
-        $entry->setPlateforme($game->getPlateforme());
 
-        $form = $this->createForm(UserGameCollectionType::class, $entry);
+        $platforms = $game->getPlateformes();
+        $entry->setPlateforme($platforms[0] ?? null);
+
+        $form = $this->createForm(UserGameCollectionType::class, $entry, [
+            'game_platforms' => $platforms,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -110,7 +114,9 @@ class CollectionController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $form = $this->createForm(UserGameCollectionType::class, $entry);
+        $form = $this->createForm(UserGameCollectionType::class, $entry, [
+            'game_platforms' => $entry->getGame()->getPlateformes(),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
