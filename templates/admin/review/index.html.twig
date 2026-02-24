@@ -1,10 +1,10 @@
 {% extends 'admin/_layout.html.twig' %}
 
-{% block title %}Moderation des avis - GameVault{% endblock %}
+{% block title %}Modération des avis - GameVault{% endblock %}
 
 {% block admin_content %}
     <div class="page-header">
-        <h1 class="page-header__title">Moderation des avis</h1>
+        <h1 class="page-header__title">Modération des avis</h1>
         <div class="page-header__actions">
             <a href="{{ path('admin_review_index', {filter: 'pending'}) }}" class="btn{% if filter == 'pending' %} btn--primary{% else %} btn--outline{% endif %} btn--sm">En attente</a>
             <a href="{{ path('admin_review_index', {filter: 'all'}) }}" class="btn{% if filter == 'all' %} btn--primary{% else %} btn--outline{% endif %} btn--sm">Tous</a>
@@ -21,7 +21,7 @@
                         </div>
                         <div>
                             <div class="review-card__name">{{ review.user.pseudo }} sur <strong>{{ review.game.titre }}</strong></div>
-                            <div class="review-card__date">{{ review.createdAt|date('d/m/Y H:i') }} — {% if review.approved %}Approuve{% else %}En attente{% endif %}</div>
+                            <div class="review-card__date">{{ review.createdAt|date('d/m/Y H:i') }} — {% if review.approved %}Approuvé{% else %}En attente{% endif %}</div>
                         </div>
                     </div>
                     {% include '_partials/_star_rating.html.twig' with {rating: review.note} %}

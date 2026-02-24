@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Communaute - GameVault{% endblock %}
+{% block title %}Communauté - GameVault{% endblock %}
 
 {% block body %}
     <div class="page-header">
-        <h1 class="page-header__title">{{ query ? 'Resultats pour "' ~ query ~ '"' : 'Communaute' }}</h1>
+        <h1 class="page-header__title">{{ query ? 'Résultats pour "' ~ query ~ '"' : 'Communauté' }}</h1>
     </div>
 
     <form method="get" action="{{ path('app_users') }}" class="igdb-search-form">
@@ -40,8 +40,8 @@
         {% else %}
             <div class="empty-state">
                 <div class="empty-state__icon">🔍</div>
-                <h3 class="empty-state__title">Aucun joueur trouve</h3>
-                <p class="empty-state__text">Aucun utilisateur ne correspond a "{{ query }}".</p>
+                <h3 class="empty-state__title">Aucun joueur trouvé</h3>
+                <p class="empty-state__text">Aucun utilisateur ne correspond à "{{ query }}".</p>
             </div>
         {% endif %}
     {% endif %}
@@ -50,7 +50,7 @@
     {% if latestReviews|length > 0 %}
         <section class="home-section">
             <div class="home-section__header">
-                <h2 class="home-section__title">{{ query ? 'Derniers avis' : 'Derniers avis de la communaute' }}</h2>
+                <h2 class="home-section__title">{{ query ? 'Derniers avis' : 'Derniers avis de la communauté' }}</h2>
             </div>
 
             {% for review in latestReviews %}
@@ -69,7 +69,7 @@
                             <div>
                                 <a href="{{ path('app_user_profile', {id: review.user.id}) }}" class="review-card__name">{{ review.user.pseudo }}</a>
                                 <div class="review-card__date">
-                                    a propos de
+                                    à propos de
                                     <a href="{{ review.game.igdbId ? path('app_game_show', {igdbId: review.game.igdbId}) : path('app_game_show_local', {id: review.game.id}) }}" class="review-card__game-link">{{ review.game.titre }}</a>
                                     &middot; {{ review.createdAt|date('d/m/Y') }}
                                 </div>
@@ -91,7 +91,7 @@
             <div class="empty-state">
                 <div class="empty-state__icon">💬</div>
                 <h3 class="empty-state__title">Aucun avis pour le moment</h3>
-                <p class="empty-state__text">Soyez le premier a laisser un avis !</p>
+                <p class="empty-state__text">Soyez le premier à laisser un avis !</p>
             </div>
         {% endif %}
     {% endif %}

@@ -50,7 +50,7 @@ class ReviewController extends AbstractController
                 $this->getUser(),
                 'review_new',
                 $game,
-                'a laisse un avis sur'
+                'a laissé un avis sur'
             );
 
             $this->addFlash('success', 'Votre avis a été soumis et sera visible après modération.');

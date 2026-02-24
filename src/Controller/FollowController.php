@@ -29,7 +29,7 @@ class FollowController extends AbstractController
         $currentUser = $this->getUser();
 
         if ($currentUser === $targetUser) {
-            $this->addFlash('warning', 'Vous ne pouvez pas vous suivre vous-meme.');
+            $this->addFlash('warning', 'Vous ne pouvez pas vous suivre vous-même.');
             return $this->redirectToRoute('app_user_profile', ['id' => $targetUser->getId()]);
         }
 

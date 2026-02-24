@@ -94,7 +94,7 @@ class CollectionController extends AbstractController
                 $this->getUser(),
                 'collection_add',
                 $game,
-                'a ajoute a sa collection'
+                'a ajouté à sa collection'
             );
 
             $this->addFlash('success', sprintf('"%s" ajouté à votre collection !', $game->getTitre()));
@@ -134,7 +134,7 @@ class CollectionController extends AbstractController
                 $this->getUser(),
                 'collection_update',
                 $entry->getGame(),
-                'a mis a jour ' . $entry->getStatut()->label() . ' :'
+                'a mis à jour ' . $entry->getStatut()->label() . ' :'
             );
 
             $this->addFlash('success', 'Collection mise à jour.');

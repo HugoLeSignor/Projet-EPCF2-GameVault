@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}GameVault - Votre collection de jeux video{% endblock %}
+{% block title %}GameVault - Votre collection de jeux vidéo{% endblock %}
 
 {% block body %}
     {# ── Hero ── #}
     <section class="hero">
-        <h1 class="hero__title">Votre univers gaming,<br><span class="hero__accent">au meme endroit.</span></h1>
+        <h1 class="hero__title">Votre univers gaming,<br><span class="hero__accent">au même endroit.</span></h1>
         <p class="hero__subtitle">Suivez vos jeux, notez-les, partagez vos avis.</p>
         <form action="{{ path('app_game_index') }}" method="get" class="hero__search">
             <input type="text" name="q" placeholder="Rechercher un jeu..." class="hero__input" autocomplete="off">
@@ -85,11 +85,11 @@
         </section>
     {% endif %}
 
-    {# ── Sorties recentes ── #}
+    {# ── Sorties récentes ── #}
     {% if recentReleases|length > 0 %}
         <section class="home-section">
             <div class="home-section__header">
-                <h2 class="home-section__title">Sorties recentes</h2>
+                <h2 class="home-section__title">Sorties récentes</h2>
                 <a href="{{ path('app_game_index') }}" class="btn btn--outline btn--sm">Voir tout</a>
             </div>
             <div class="grid grid--4">
@@ -129,7 +129,7 @@
             'Aventure': '🗺️',
             'RPG': '🐉',
             'FPS': '🎯',
-            'Strategie': '♟️',
+            'Stratégie': '♟️',
             'Sport': '⚽',
             'Course': '🏎️',
             'Simulation': '🛩️',
@@ -151,9 +151,9 @@
     {# ── CTA for guests ── #}
     {% if not app.user %}
         <section class="home-cta">
-            <h2>Pret a commencer ?</h2>
-            <p>Creez votre compte et commencez a suivre vos jeux.</p>
-            <a href="{{ path('app_register') }}" class="btn btn--primary btn--lg">Creer un compte</a>
+            <h2>Prêt à commencer ?</h2>
+            <p>Créez votre compte et commencez à suivre vos jeux.</p>
+            <a href="{{ path('app_register') }}" class="btn btn--primary btn--lg">Créer un compte</a>
         </section>
     {% endif %}
 {% endblock %}

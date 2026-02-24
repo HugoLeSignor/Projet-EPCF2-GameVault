@@ -11,7 +11,7 @@
         <div class="navbar__collapse">
             <ul class="navbar__menu">
                 <li><a href="{{ path('app_game_index') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_game' %} navbar__link--active{% endif %}">Catalogue</a></li>
-                <li><a href="{{ path('app_users') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_user' %} navbar__link--active{% endif %}">Communaute</a></li>
+                <li><a href="{{ path('app_users') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_user' %} navbar__link--active{% endif %}">Communauté</a></li>
                 {% if is_granted('ROLE_USER') %}
                     <li><a href="{{ path('app_collection_index') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_collection' %} navbar__link--active{% endif %}">Ma Collection</a></li>
                     <li><a href="{{ path('app_profile') }}" class="navbar__link{% if app.request.attributes.get('_route') starts with 'app_profile' %} navbar__link--active{% endif %}">Profil</a></li>
@@ -30,7 +30,7 @@
                         {% endif %}
                     </a>
                     <span class="navbar__user">{{ app.user.pseudo }}</span>
-                    <a href="{{ path('app_logout') }}" class="btn btn--outline btn--sm">Deconnexion</a>
+                    <a href="{{ path('app_logout') }}" class="btn btn--outline btn--sm">Déconnexion</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="btn btn--outline btn--sm">Connexion</a>
                     <a href="{{ path('app_register') }}" class="btn btn--primary btn--sm">Inscription</a>

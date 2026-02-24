@@ -51,7 +51,7 @@ class NotificationController extends AbstractController
 
         $notifRepo->markAllRead($this->getUser());
 
-        $this->addFlash('success', 'Toutes les notifications marquees comme lues.');
+        $this->addFlash('success', 'Toutes les notifications marquées comme lues.');
         return $this->redirectToRoute('app_notifications');
     }
 }
