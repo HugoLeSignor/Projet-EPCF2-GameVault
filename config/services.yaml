@@ -27,14 +27,6 @@ services:
             $igdbClientId: '%env(IGDB_CLIENT_ID)%'
             $igdbClientSecret: '%env(IGDB_CLIENT_SECRET)%'
 
-    App\Controller\RegistrationController:
-        arguments:
-            $registrationLimiter: '@limiter.registration_limiter'
-
-    App\Controller\ResetPasswordController:
-        arguments:
-            $passwordResetLimiter: '@limiter.password_reset_limiter'
-
     App\Controller\Admin\UserManagementController:
         arguments:
             $auditLogger: '@monolog.logger.admin_audit'
