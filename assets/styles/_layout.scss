@@ -75,6 +75,69 @@
     }
 }
 
+// Admin table unread row
+.admin-table__row--unread {
+    background-color: rgba($color-accent, 0.05);
+}
+
+// Contact detail (admin)
+.contact-detail {
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: $spacing-xl;
+
+    &__meta {
+        margin-bottom: $spacing-xl;
+        padding-bottom: $spacing-lg;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    &__field {
+        display: flex;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-sm;
+        color: $color-text-secondary;
+        font-size: $font-size-sm;
+    }
+
+    &__label {
+        font-weight: 600;
+        color: $color-text-muted;
+        min-width: 60px;
+    }
+
+    &__body {
+        color: $color-text-secondary;
+        line-height: 1.7;
+        margin-bottom: $spacing-xl;
+    }
+
+    &__actions {
+        display: flex;
+        gap: $spacing-md;
+        padding-top: $spacing-lg;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}
+
+// Contact form page
+.contact-form {
+    margin-top: $spacing-xl;
+}
+
+.contact-info {
+    background-color: $color-bg-card;
+    border-radius: $radius-md;
+    padding: $spacing-md $spacing-lg;
+    margin-bottom: $spacing-lg;
+
+    p {
+        margin: 0;
+        color: $color-text-secondary;
+        font-size: $font-size-sm;
+    }
+}
+
 // Legal pages
 .legal-page {
     max-width: 800px;

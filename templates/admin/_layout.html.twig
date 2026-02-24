@@ -9,6 +9,7 @@
             <a href="{{ path('admin_review_index') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_review' %} admin-sidebar__link--active{% endif %}">Avis</a>
             <a href="{{ path('admin_user_index') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_user' %} admin-sidebar__link--active{% endif %}">Utilisateurs</a>
             <a href="{{ path('admin_igdb_search') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_igdb' %} admin-sidebar__link--active{% endif %}">Importer IGDB</a>
+            <a href="{{ path('admin_contact_index') }}" class="admin-sidebar__link{% if app.request.attributes.get('_route') starts with 'admin_contact' %} admin-sidebar__link--active{% endif %}">Messages</a>
         </aside>
         <div>
             {% block admin_content %}{% endblock %}

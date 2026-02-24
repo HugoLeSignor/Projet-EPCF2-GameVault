@@ -1,0 +1,41 @@
+{% extends 'admin/_layout.html.twig' %}
+
+{% block title %}Message de {{ message.nom }} - GameVault{% endblock %}
+
+{% block admin_content %}
+    <div class="page-header">
+        <h1 class="page-header__title">Message de {{ message.nom }}</h1>
+        <div class="page-header__actions">
+            <a href="{{ path('admin_contact_index') }}" class="btn btn--outline btn--sm">Retour</a>
+        </div>
+    </div>
+
+    <div class="contact-detail">
+        <div class="contact-detail__meta">
+            <div class="contact-detail__field">
+                <span class="contact-detail__label">De :</span>
+                <span>{{ message.nom }} (<a href="mailto:{{ message.email }}">{{ message.email }}</a>)</span>
+            </div>
+            <div class="contact-detail__field">
+                <span class="contact-detail__label">Date :</span>
+                <span>{{ message.createdAt|date('d/m/Y à H:i') }}</span>
+            </div>
+            <div class="contact-detail__field">
+                <span class="contact-detail__label">Sujet :</span>
+                <span>{{ message.sujet }}</span>
+            </div>
+        </div>
+
+        <div class="contact-detail__body">
+            {{ message.message|nl2br }}
+        </div>
+
+        <div class="contact-detail__actions">
+            <a href="mailto:{{ message.email }}?subject=Re: {{ message.sujet }}" class="btn btn--primary">Répondre par e-mail</a>
+            <form action="{{ path('admin_contact_delete', {id: message.id}) }}" method="post" style="display:inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message.id) }}">
+                <button type="submit" class="btn btn--danger" onclick="return confirm('Supprimer ce message ?')">Supprimer</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

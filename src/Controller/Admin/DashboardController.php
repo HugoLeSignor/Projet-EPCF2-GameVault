@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Repository\ContactMessageRepository;
 use App\Repository\GameRepository;
 use App\Repository\ReviewRepository;
 use App\Repository\UserRepository;
@@ -19,12 +20,14 @@ class DashboardController extends AbstractController
         UserRepository $userRepo,
         GameRepository $gameRepo,
         ReviewRepository $reviewRepo,
+        ContactMessageRepository $contactRepo,
     ): Response {
         return $this->render('admin/dashboard.html.twig', [
             'totalUsers' => $userRepo->count([]),
             'totalGames' => $gameRepo->count([]),
             'pendingReviews' => $reviewRepo->count(['isApproved' => false]),
             'totalReviews' => $reviewRepo->count([]),
+            'unreadMessages' => $contactRepo->countUnread(),
         ]);
     }
 }
