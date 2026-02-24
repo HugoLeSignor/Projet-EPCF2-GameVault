@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault - Wireframe Page d'accueil</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 40px; color: #333; }
+
+        h1.page-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 40px;
+            color: #666;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .views {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .view-label {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #999;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ── Desktop frame ── */
+        .desktop-frame {
+            width: 960px;
+            background: #fff;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        /* ── Mobile frame ── */
+        .mobile-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .mobile-frame {
+            width: 375px;
+            background: #fff;
+            border: 2px solid #ccc;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding-top: 24px;
+        }
+        .mobile-frame .mobile-notch {
+            width: 120px;
+            height: 6px;
+            background: #ddd;
+            border-radius: 3px;
+            margin: 0 auto 16px;
+        }
+
+        /* ── Wireframe styles ── */
+        .wf-navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            border-bottom: 2px solid #ddd;
+        }
+        .wf-logo {
+            font-weight: bold;
+            font-size: 18px;
+            border: 2px solid #333;
+            padding: 4px 12px;
+            border-radius: 4px;
+        }
+        .wf-nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .wf-nav-link {
+            background: #eee;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #666;
+        }
+        .wf-nav-auth {
+            display: flex;
+            gap: 8px;
+        }
+        .wf-btn-outline {
+            border: 1.5px solid #999;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+            background: transparent;
+        }
+        .wf-btn-filled {
+            border: 1.5px solid #333;
+            background: #333;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Hero */
+        .wf-hero {
+            text-align: center;
+            padding: 48px 24px 40px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .wf-hero h1 {
+            font-size: 28px;
+            color: #333;
+            line-height: 1.3;
+        }
+        .wf-hero h1 span {
+            color: #999;
+        }
+        .wf-hero p {
+            color: #888;
+            margin: 12px 0 24px;
+            font-size: 15px;
+        }
+        .wf-search {
+            display: flex;
+            gap: 8px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .wf-search-input {
+            flex: 1;
+            border: 2px solid #ccc;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Section */
+        .wf-section {
+            padding: 32px 24px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .wf-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .wf-section-title {
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* Game cards grid */
+        .wf-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        .wf-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .wf-card {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .wf-card-image {
+            background: #e8e8e8;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bbb;
+            font-size: 12px;
+        }
+        .wf-card-body {
+            padding: 10px;
+        }
+        .wf-card-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 6px;
+        }
+        .wf-card-tags {
+            display: flex;
+            gap: 6px;
+        }
+        .wf-tag {
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            color: #888;
+            border: 1px solid #ddd;
+        }
+
+        /* Genre grid */
+        .wf-genre-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        .wf-genre-card {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        .wf-genre-emoji {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .wf-genre-name {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* CTA */
+        .wf-cta {
+            text-align: center;
+            padding: 40px 24px;
+            border: 2px dashed #ccc;
+            margin: 24px;
+            border-radius: 8px;
+        }
+        .wf-cta h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .wf-cta p {
+            color: #888;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        .wf-footer {
+            text-align: center;
+            padding: 16px;
+            border-top: 2px solid #ddd;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* ── Mobile overrides ── */
+        .mobile-frame .wf-navbar {
+            padding: 10px 16px;
+        }
+        .mobile-frame .wf-nav-links {
+            display: none;
+        }
+        .mobile-frame .wf-hamburger {
+            display: block;
+            width: 24px;
+            height: 18px;
+            position: relative;
+        }
+        .mobile-frame .wf-hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: #333;
+            margin-bottom: 5px;
+        }
+        .desktop-frame .wf-hamburger {
+            display: none;
+        }
+        .mobile-frame .wf-hero {
+            padding: 32px 16px 28px;
+        }
+        .mobile-frame .wf-hero h1 {
+            font-size: 20px;
+        }
+        .mobile-frame .wf-search {
+            flex-direction: column;
+        }
+        .mobile-frame .wf-section {
+            padding: 24px 16px;
+        }
+        .mobile-frame .wf-grid-4,
+        .mobile-frame .wf-grid-3 {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .mobile-frame .wf-card-image {
+            height: 100px;
+        }
+        .mobile-frame .wf-genre-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .mobile-frame .wf-genre-card {
+            padding: 10px;
+        }
+        .mobile-frame .wf-cta {
+            margin: 16px;
+            padding: 28px 16px;
+        }
+
+        /* Annotations */
+        .annotation {
+            position: relative;
+        }
+        .annotation::after {
+            content: attr(data-label);
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ffeeba;
+            color: #856404;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            white-space: nowrap;
+            border: 1px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">Wireframe - Page d'accueil GameVault</h1>
+
+    <div class="views">
+        <!-- ══════════ DESKTOP ══════════ -->
+        <div>
+            <div class="view-label">Desktop (960px)</div>
+            <div class="desktop-frame">
+                <!-- Navbar -->
+                <div class="wf-navbar">
+                    <div class="wf-logo">GameVault</div>
+                    <div class="wf-hamburger"><span></span><span></span><span></span></div>
+                    <div class="wf-nav-links">
+                        <div class="wf-nav-link">Catalogue</div>
+                        <div class="wf-nav-link">Communaute</div>
+                        <div class="wf-nav-link">Ma Collection</div>
+                        <div class="wf-nav-link">Profil</div>
+                    </div>
+                    <div class="wf-nav-auth">
+                        <div class="wf-btn-outline">Connexion</div>
+                        <div class="wf-btn-filled">Inscription</div>
+                    </div>
+                </div>
+
+                <!-- Hero -->
+                <div class="wf-hero">
+                    <h1>Votre univers gaming,<br><span>au meme endroit.</span></h1>
+                    <p>Suivez vos jeux, notez-les, partagez vos avis.</p>
+                    <div class="wf-search">
+                        <div class="wf-search-input">Rechercher un jeu...</div>
+                        <div class="wf-btn-filled">Rechercher</div>
+                    </div>
+                </div>
+
+                <!-- Reprendre -->
+                <div class="wf-section">
+                    <div class="wf-section-header">
+                        <div class="wf-section-title">Reprendre</div>
+                        <div class="wf-btn-outline">Ma collection</div>
+                    </div>
+                    <div class="wf-grid-3">
+                        <div class="wf-card">
+                            <div class="wf-card-image">264 x 352</div>
+                            <div class="wf-card-body">
+                                <div class="wf-card-title">Nom du jeu</div>
+                                <div class="wf-card-tags"><span class="wf-tag">En cours</span><span class="wf-tag">12h 30min</span></div>
+                            </div>
+                        </div>
+                        <div class="wf-card">
+                            <div class="wf-card-image">264 x 352</div>
+                            <div class="wf-card-body">
+                                <div class="wf-card-title">Nom du jeu</div>
+                                <div class="wf-card-tags"><span class="wf-tag">En cours</span><span class="wf-tag">5h 45min</span></div>
+                            </div>
+                        </div>
+                        <div class="wf-card">
+                            <div class="wf-card-image">264 x 352</div>
+                            <div class="wf-card-body">
+                                <div class="wf-card-title">Nom du jeu</div>
+                                <div class="wf-card-tags"><span class="wf-tag">En cours</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jeux populaires -->
+                <div class="wf-section">
+                    <div class="wf-section-header">
+                        <div class="wf-section-title">Jeux populaires</div>
+                        <div class="wf-btn-outline">Voir tout</div>
+                    </div>
+                    <div class="wf-grid-4">
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PC</span><span class="wf-tag">Action</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PS5</span><span class="wf-tag">RPG</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">Switch</span><span class="wf-tag">Aventure</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">Xbox</span><span class="wf-tag">FPS</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PC</span><span class="wf-tag">Strategie</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PS4</span><span class="wf-tag">Sport</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PC</span><span class="wf-tag">Indie</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PS5</span><span class="wf-tag">Horreur</span></div></div></div>
+                    </div>
+                </div>
+
+                <!-- Sorties recentes -->
+                <div class="wf-section">
+                    <div class="wf-section-header">
+                        <div class="wf-section-title">Sorties recentes</div>
+                        <div class="wf-btn-outline">Voir tout</div>
+                    </div>
+                    <div class="wf-grid-4">
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PS5</span><span class="wf-tag">24/02/2026</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PC</span><span class="wf-tag">15/02/2026</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">Switch</span><span class="wf-tag">10/02/2026</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image">Image</div><div class="wf-card-body"><div class="wf-card-title">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">Xbox</span><span class="wf-tag">01/02/2026</span></div></div></div>
+                    </div>
+                </div>
+
+                <!-- Explorer par genre -->
+                <div class="wf-section">
+                    <div class="wf-section-header">
+                        <div class="wf-section-title">Explorer par genre</div>
+                    </div>
+                    <div class="wf-genre-grid">
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#9876;&#65039;</span><span class="wf-genre-name">Action</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#128506;&#65039;</span><span class="wf-genre-name">Aventure</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#128009;</span><span class="wf-genre-name">RPG</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#127919;</span><span class="wf-genre-name">FPS</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#9823;&#65039;</span><span class="wf-genre-name">Strategie</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#9917;</span><span class="wf-genre-name">Sport</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#127950;&#65039;</span><span class="wf-genre-name">Course</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#128745;&#65039;</span><span class="wf-genre-name">Simulation</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#129513;</span><span class="wf-genre-name">Puzzle</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#127812;</span><span class="wf-genre-name">Plateforme</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#128123;</span><span class="wf-genre-name">Horreur</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#127912;</span><span class="wf-genre-name">Indie</span></div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="wf-cta">
+                    <h2>Pret a commencer ?</h2>
+                    <p>Creez votre compte et commencez a suivre vos jeux.</p>
+                    <div class="wf-btn-filled" style="display:inline-block; padding: 10px 28px; font-size: 14px;">Creer un compte</div>
+                </div>
+
+                <!-- Footer -->
+                <div class="wf-footer">GameVault &copy; 2026 - Votre collection de jeux video</div>
+            </div>
+        </div>
+
+        <!-- ══════════ MOBILE ══════════ -->
+        <div class="mobile-wrapper">
+            <div class="view-label">Mobile (375px)</div>
+            <div class="mobile-frame">
+                <div class="mobile-notch"></div>
+
+                <!-- Navbar -->
+                <div class="wf-navbar">
+                    <div class="wf-logo" style="font-size:15px; padding:3px 8px;">GameVault</div>
+                    <div class="wf-hamburger"><span></span><span></span><span></span></div>
+                    <div class="wf-nav-links">
+                        <div class="wf-nav-link">Catalogue</div>
+                    </div>
+                    <div class="wf-nav-auth">
+                        <div class="wf-btn-filled" style="font-size:11px; padding:4px 10px;">Inscription</div>
+                    </div>
+                </div>
+
+                <!-- Hero -->
+                <div class="wf-hero">
+                    <h1>Votre univers gaming,<br><span>au meme endroit.</span></h1>
+                    <p>Suivez vos jeux, notez-les, partagez vos avis.</p>
+                    <div class="wf-search">
+                        <div class="wf-search-input">Rechercher un jeu...</div>
+                        <div class="wf-btn-filled" style="text-align:center;">Rechercher</div>
+                    </div>
+                </div>
+
+                <!-- Reprendre -->
+                <div class="wf-section">
+                    <div class="wf-section-header">
+                        <div class="wf-section-title" style="font-size:15px;">Reprendre</div>
+                        <div class="wf-btn-outline" style="font-size:10px;">Ma collection</div>
+                    </div>
+                    <div class="wf-grid-3">
+                        <div class="wf-card">
+                            <div class="wf-card-image" style="height:90px;">Image</div>
+                            <div class="wf-card-body">
+                                <div class="wf-card-title" style="font-size:11px;">Nom du jeu</div>
+                                <div class="wf-card-tags"><span class="wf-tag">En cours</span></div>
+                            </div>
+                        </div>
+                        <div class="wf-card">
+                            <div class="wf-card-image" style="height:90px;">Image</div>
+                            <div class="wf-card-body">
+                                <div class="wf-card-title" style="font-size:11px;">Nom du jeu</div>
+                                <div class="wf-card-tags"><span class="wf-tag">En cours</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jeux populaires -->
+                <div class="wf-section">
+                    <div class="wf-section-header">
+                        <div class="wf-section-title" style="font-size:15px;">Jeux populaires</div>
+                        <div class="wf-btn-outline" style="font-size:10px;">Voir tout</div>
+                    </div>
+                    <div class="wf-grid-4">
+                        <div class="wf-card"><div class="wf-card-image" style="height:90px;">Image</div><div class="wf-card-body"><div class="wf-card-title" style="font-size:11px;">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PC</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image" style="height:90px;">Image</div><div class="wf-card-body"><div class="wf-card-title" style="font-size:11px;">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">PS5</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image" style="height:90px;">Image</div><div class="wf-card-body"><div class="wf-card-title" style="font-size:11px;">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">Switch</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image" style="height:90px;">Image</div><div class="wf-card-body"><div class="wf-card-title" style="font-size:11px;">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">Xbox</span></div></div></div>
+                    </div>
+                </div>
+
+                <!-- Sorties recentes -->
+                <div class="wf-section">
+                    <div class="wf-section-header">
+                        <div class="wf-section-title" style="font-size:15px;">Sorties recentes</div>
+                        <div class="wf-btn-outline" style="font-size:10px;">Voir tout</div>
+                    </div>
+                    <div class="wf-grid-4">
+                        <div class="wf-card"><div class="wf-card-image" style="height:90px;">Image</div><div class="wf-card-body"><div class="wf-card-title" style="font-size:11px;">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">24/02</span></div></div></div>
+                        <div class="wf-card"><div class="wf-card-image" style="height:90px;">Image</div><div class="wf-card-body"><div class="wf-card-title" style="font-size:11px;">Nom du jeu</div><div class="wf-card-tags"><span class="wf-tag">15/02</span></div></div></div>
+                    </div>
+                </div>
+
+                <!-- Explorer par genre -->
+                <div class="wf-section">
+                    <div class="wf-section-header">
+                        <div class="wf-section-title" style="font-size:15px;">Explorer par genre</div>
+                    </div>
+                    <div class="wf-genre-grid">
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#9876;&#65039;</span><span class="wf-genre-name">Action</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#128506;&#65039;</span><span class="wf-genre-name">Aventure</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#128009;</span><span class="wf-genre-name">RPG</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#127919;</span><span class="wf-genre-name">FPS</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#9823;&#65039;</span><span class="wf-genre-name">Strategie</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#9917;</span><span class="wf-genre-name">Sport</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#127950;&#65039;</span><span class="wf-genre-name">Course</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#128745;&#65039;</span><span class="wf-genre-name">Simulation</span></div>
+                        <div class="wf-genre-card"><span class="wf-genre-emoji">&#129513;</span><span class="wf-genre-name">Puzzle</span></div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="wf-cta">
+                    <h2 style="font-size:17px;">Pret a commencer ?</h2>
+                    <p style="font-size:13px;">Creez votre compte et commencez a suivre vos jeux.</p>
+                    <div class="wf-btn-filled" style="display:inline-block; padding: 8px 20px; font-size: 13px;">Creer un compte</div>
+                </div>
+
+                <!-- Footer -->
+                <div class="wf-footer">GameVault &copy; 2026</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

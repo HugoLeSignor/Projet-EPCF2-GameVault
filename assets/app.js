@@ -1,7 +1,18 @@
 import './styles/app.scss';
 
-// Toggle progression field visibility based on game status
 document.addEventListener('DOMContentLoaded', () => {
+    // ── Burger menu toggle ──
+    const burger = document.querySelector('.navbar__burger');
+    const collapse = document.querySelector('.navbar__collapse');
+    if (burger && collapse) {
+        burger.addEventListener('click', () => {
+            const isOpen = collapse.classList.toggle('navbar__collapse--open');
+            burger.classList.toggle('navbar__burger--open', isOpen);
+            burger.setAttribute('aria-expanded', isOpen);
+        });
+    }
+
+    // ── Toggle progression field visibility based on game status ──
     const statutSelect = document.getElementById('user_game_collection_statut');
     if (!statutSelect) return;
 

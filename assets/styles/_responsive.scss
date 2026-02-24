@@ -1,15 +1,43 @@
+// ══════════════════════════════════════════════════════
+// Responsive — GameVault
+// ══════════════════════════════════════════════════════
+
+// ── Large screens (≤992px) ──
 @media (max-width: $breakpoint-lg) {
     .grid--4 { grid-template-columns: repeat(3, 1fr); }
     .game-detail { grid-template-columns: 280px 1fr; }
     .genre-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
+// ── Medium screens / tablets (≤768px) ──
 @media (max-width: $breakpoint-md) {
+    .container {
+        padding: 0 $spacing-md;
+    }
+
+    // Grids
     .grid--4 { grid-template-columns: repeat(2, 1fr); }
     .grid--3 { grid-template-columns: repeat(2, 1fr); }
-    .game-detail { grid-template-columns: 1fr; }
-    .genre-grid { grid-template-columns: repeat(2, 1fr); }
+    .genre-grid { grid-template-columns: repeat(3, 1fr); }
 
+    // Game detail → single column
+    .game-detail {
+        grid-template-columns: 1fr;
+
+        &__placeholder {
+            height: 250px;
+        }
+    }
+
+    // Game card images smaller
+    .game-card {
+        &__image,
+        &__placeholder {
+            height: 160px;
+        }
+    }
+
+    // Hero compact
     .hero {
         padding: $spacing-xl 0;
 
@@ -20,34 +48,24 @@
         }
     }
 
+    // Section headers stack
     .home-section__header {
         flex-direction: column;
         align-items: flex-start;
         gap: $spacing-sm;
     }
 
-    .navbar {
-        &__container {
-            flex-wrap: wrap;
-            gap: $spacing-sm;
-        }
-
-        &__menu {
-            order: 3;
-            width: 100%;
-            justify-content: center;
-            gap: $spacing-sm;
-        }
-    }
-
+    // Filter bar fields stack
     .filter-bar__form {
         flex-direction: column;
 
         .filter-bar__field {
             width: 100%;
+            min-width: 0;
         }
     }
 
+    // Collection items stack
     .collection-item {
         flex-direction: column;
         text-align: center;
@@ -57,27 +75,351 @@
         }
     }
 
-    .profile-header {
+    // Review card header — stack author + stars vertically
+    .review-card {
+        &__header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: $spacing-sm;
+        }
+
+        &__footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: $spacing-sm;
+        }
+    }
+
+    // Star rating smaller
+    .star-rating__star {
+        font-size: $font-size-base;
+    }
+
+    // IGDB search cards — stack vertically
+    .igdb-card {
         flex-direction: column;
-        text-align: center;
+
+        &__image {
+            width: 100%;
+            height: 180px;
+        }
+
+        &__actions {
+            width: 100%;
+
+            .btn, form {
+                width: 100%;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
     }
-}
 
-@media (max-width: $breakpoint-sm) {
-    .grid--4,
-    .grid--3,
-    .grid--2 { grid-template-columns: 1fr; }
-
-    .genre-grid { grid-template-columns: repeat(2, 1fr); }
-
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+    // Admin layout — stack sidebar + content
+    .admin-layout {
+        flex-direction: column;
+        gap: $spacing-md;
     }
 
+    .admin-sidebar {
+        min-width: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: $spacing-xs;
+        padding: $spacing-md;
+
+        &__title {
+            width: 100%;
+            margin-bottom: $spacing-xs;
+        }
+    }
+
+    // Tables — horizontal scroll
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        min-width: 500px;
+    }
+
+    // Page header stack
     .page-header {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .hero__title { font-size: 1.6rem; }
+    // Profile header
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    // Auth form compact
+    .auth-form {
+        margin: $spacing-lg auto;
+
+        &__card {
+            padding: $spacing-lg;
+        }
+    }
+
+    // Form actions stack
+    .form-actions {
+        flex-direction: column;
+        gap: $spacing-sm;
+
+        .btn {
+            width: 100%;
+        }
+    }
+
+    // Game detail buttons stack
+    .game-detail .d-flex.gap-sm {
+        flex-direction: column;
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}
+
+// ── Small screens / mobile (≤576px) ──
+@media (max-width: $breakpoint-sm) {
+    .container {
+        padding: 0 $spacing-sm;
+    }
+
+    .main-content {
+        padding: $spacing-md 0;
+    }
+
+    // Grids stay 2 columns on mobile
+    .grid--4,
+    .grid--3,
+    .grid--2 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: $spacing-sm;
+    }
+
+    // Genre grid 3 columns compact
+    .genre-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: $spacing-sm;
+    }
+
+    .genre-card {
+        flex-direction: column;
+        text-align: center;
+        padding: $spacing-sm;
+        gap: $spacing-xs;
+
+        &__emoji {
+            font-size: 1.2rem;
+        }
+
+        &__name {
+            font-size: 0.75rem;
+        }
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    // Hero compact
+    .hero {
+        padding: $spacing-lg 0;
+        margin-bottom: $spacing-md;
+
+        &__title {
+            font-size: 1.5rem;
+        }
+
+        &__subtitle {
+            font-size: $font-size-sm;
+            margin-bottom: $spacing-md;
+        }
+    }
+
+    .home-section {
+        margin-bottom: $spacing-xl;
+    }
+
+    // Game cards: smaller images + compact body
+    .game-card {
+        &__image,
+        &__placeholder {
+            height: 120px;
+        }
+
+        &__body {
+            padding: $spacing-sm;
+        }
+
+        &__title {
+            font-size: $font-size-sm;
+        }
+
+        &__tag {
+            font-size: 0.6rem;
+            padding: 1px $spacing-xs;
+        }
+    }
+
+    // Review cards compact
+    .review-card {
+        padding: $spacing-md;
+
+        &__content {
+            font-size: $font-size-sm;
+            line-height: 1.5;
+        }
+    }
+
+    // Star rating even smaller
+    .star-rating__star {
+        font-size: $font-size-sm;
+    }
+
+    // CTA compact
+    .home-cta {
+        padding: $spacing-lg;
+
+        h2 {
+            font-size: $font-size-xl;
+        }
+    }
+
+    // Game detail
+    .game-detail {
+        gap: $spacing-md;
+
+        &__info h1 {
+            font-size: $font-size-xl;
+        }
+
+        &__stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        &__placeholder {
+            height: 200px;
+        }
+    }
+
+    // Filter bar compact
+    .filter-bar {
+        padding: $spacing-sm $spacing-md;
+    }
+
+    // Footer compact
+    .footer {
+        padding: $spacing-md 0;
+        margin-top: $spacing-xl;
+    }
+
+    // IGDB cards even more compact
+    .igdb-card {
+        padding: $spacing-sm;
+
+        &__image {
+            height: 140px;
+        }
+
+        &__title {
+            font-size: $font-size-base;
+        }
+
+        &__summary {
+            display: none;
+        }
+    }
+
+    // Buttons full-width on very small screens
+    .page-header__actions {
+        width: 100%;
+
+        .btn {
+            flex: 1;
+        }
+    }
+
+    // Collection items compact
+    .collection-item {
+        padding: $spacing-sm $spacing-md;
+        gap: $spacing-sm;
+
+        &__image,
+        &__placeholder {
+            width: 60px;
+            height: 60px;
+        }
+
+        &__meta {
+            gap: $spacing-sm;
+        }
+    }
+
+    // User search list
+    .user-list {
+        grid-template-columns: 1fr;
+    }
+
+    .user-card {
+        padding: $spacing-md;
+    }
+
+    // Notification items
+    .notif-item {
+        gap: $spacing-sm;
+    }
+
+    // Profile stats bar
+    .profile-stats-bar {
+        flex-wrap: wrap;
+
+        &__item {
+            flex: 1 0 28%;
+            padding: $spacing-xs;
+        }
+
+        &__value {
+            font-size: $font-size-base;
+        }
+
+        &__label {
+            font-size: 0.65rem;
+        }
+    }
+
+    // Profile distributions
+    .profile-distributions {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-distrib-card {
+        &__label {
+            min-width: 70px;
+            font-size: 0.75rem;
+        }
+    }
+
+    // Profile game cards grid
+    .profile-cards {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: $spacing-sm;
+    }
+
+    // Page title smaller
+    .page-header__title {
+        font-size: $font-size-xl;
+    }
+
+    h1 { font-size: $font-size-xl; }
+    h2 { font-size: $font-size-lg; }
 }

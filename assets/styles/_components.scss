@@ -251,6 +251,13 @@
     }
 }
 
+// Table responsive wrapper
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 // Table
 .table {
     width: 100%;

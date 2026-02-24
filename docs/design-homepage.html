@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameVault - Design Page d'accueil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #1a1a2e; padding: 40px; color: #e0e0e0; }
+
+        h1.page-title {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 40px;
+            color: #e94560;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .views {
+            display: flex;
+            gap: 60px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .view-label {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #8a8a9a;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ── Desktop frame ── */
+        .desktop-frame {
+            width: 960px;
+            background: #0f0f1a;
+            border: 2px solid #2a2a3e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+        }
+
+        /* ── Mobile frame ── */
+        .mobile-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .mobile-frame {
+            width: 375px;
+            background: #0f0f1a;
+            border: 2px solid #2a2a3e;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+            padding-top: 24px;
+        }
+        .mobile-frame .mobile-notch {
+            width: 120px;
+            height: 6px;
+            background: #2a2a3e;
+            border-radius: 3px;
+            margin: 0 auto 16px;
+        }
+
+        /* ── Design styles ── */
+        .ds-navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            background: #0f0f1a;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        .ds-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: #e94560;
+        }
+        .ds-nav-links {
+            display: flex;
+            gap: 24px;
+        }
+        .ds-nav-link {
+            font-size: 14px;
+            color: #8a8a9a;
+            font-weight: 500;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+        .ds-nav-link:hover, .ds-nav-link--active {
+            color: #fff;
+        }
+        .ds-nav-auth {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .ds-btn-outline {
+            border: 1.5px solid #e94560;
+            padding: 7px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #e94560;
+            background: transparent;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .ds-btn-primary {
+            border: none;
+            background: #e94560;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .ds-btn-primary--lg {
+            padding: 12px 32px;
+            font-size: 15px;
+            border-radius: 8px;
+        }
+
+        /* Hero */
+        .ds-hero {
+            text-align: center;
+            padding: 56px 24px 48px;
+            background: linear-gradient(180deg, #0f0f1a 0%, #16162a 100%);
+        }
+        .ds-hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.3;
+        }
+        .ds-hero h1 span {
+            color: #e94560;
+        }
+        .ds-hero p {
+            color: #8a8a9a;
+            margin: 14px 0 28px;
+            font-size: 16px;
+        }
+        .ds-search {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .ds-search-input {
+            flex: 1;
+            background: #1a1a2e;
+            border: 1px solid #2a2a3e;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #555;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Section */
+        .ds-section {
+            padding: 36px 24px;
+        }
+        .ds-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+        .ds-section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .ds-btn-sm {
+            border: 1px solid #2a2a3e;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #8a8a9a;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        /* Game cards */
+        .ds-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+        .ds-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+        .ds-card {
+            background: #16162a;
+            border: 1px solid #2a2a3e;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+        .ds-card:hover {
+            transform: translateY(-4px);
+            border-color: #e94560;
+        }
+        .ds-card-image {
+            background: linear-gradient(135deg, #1a1a2e, #2a2a3e);
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        .ds-card-body {
+            padding: 12px;
+        }
+        .ds-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .ds-card-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .ds-tag {
+            background: #1a1a2e;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #8a8a9a;
+            border: 1px solid #2a2a3e;
+        }
+        .ds-tag--accent {
+            background: rgba(233, 69, 96, 0.15);
+            color: #e94560;
+            border-color: rgba(233, 69, 96, 0.3);
+        }
+
+        /* Genre grid */
+        .ds-genre-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+        .ds-genre-card {
+            background: #16162a;
+            border: 1px solid #2a2a3e;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .ds-genre-card:hover {
+            border-color: #e94560;
+            background: #1a1a2e;
+        }
+        .ds-genre-emoji {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .ds-genre-name {
+            font-size: 13px;
+            color: #ccc;
+            font-weight: 500;
+        }
+
+        /* CTA */
+        .ds-cta {
+            text-align: center;
+            padding: 48px 24px;
+            background: linear-gradient(135deg, #16162a, #1a1a2e);
+            border-top: 1px solid #2a2a3e;
+        }
+        .ds-cta h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .ds-cta p {
+            color: #8a8a9a;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        /* Footer */
+        .ds-footer {
+            text-align: center;
+            padding: 18px;
+            border-top: 1px solid #1a1a2e;
+            font-size: 13px;
+            color: #555;
+        }
+
+        /* ── Mobile overrides ── */
+        .mobile-frame .ds-navbar {
+            padding: 10px 16px;
+        }
+        .mobile-frame .ds-nav-links {
+            display: none;
+        }
+        .mobile-frame .ds-hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .mobile-frame .ds-hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #8a8a9a;
+            border-radius: 1px;
+        }
+        .desktop-frame .ds-hamburger {
+            display: none;
+        }
+        .mobile-frame .ds-hero {
+            padding: 36px 16px 32px;
+        }
+        .mobile-frame .ds-hero h1 {
+            font-size: 22px;
+        }
+        .mobile-frame .ds-hero p {
+            font-size: 14px;
+        }
+        .mobile-frame .ds-search {
+            flex-direction: column;
+        }
+        .mobile-frame .ds-section {
+            padding: 24px 16px;
+        }
+        .mobile-frame .ds-section-title {
+            font-size: 17px;
+        }
+        .mobile-frame .ds-grid-4,
+        .mobile-frame .ds-grid-3 {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .mobile-frame .ds-card-image {
+            height: 110px;
+        }
+        .mobile-frame .ds-genre-grid {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .mobile-frame .ds-genre-card {
+            padding: 12px;
+        }
+        .mobile-frame .ds-genre-emoji {
+            font-size: 22px;
+        }
+        .mobile-frame .ds-genre-name {
+            font-size: 11px;
+        }
+        .mobile-frame .ds-cta {
+            padding: 32px 16px;
+        }
+        .mobile-frame .ds-cta h2 {
+            font-size: 19px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">Design - Page d'accueil GameVault</h1>
+
+    <div class="views">
+        <!-- ══════════ DESKTOP ══════════ -->
+        <div>
+            <div class="view-label">Desktop (960px)</div>
+            <div class="desktop-frame">
+                <!-- Navbar -->
+                <div class="ds-navbar">
+                    <div class="ds-logo">GameVault</div>
+                    <div class="ds-hamburger"><span></span><span></span><span></span></div>
+                    <div class="ds-nav-links">
+                        <div class="ds-nav-link ds-nav-link--active">Catalogue</div>
+                        <div class="ds-nav-link">Communaute</div>
+                        <div class="ds-nav-link">Ma Collection</div>
+                        <div class="ds-nav-link">Profil</div>
+                    </div>
+                    <div class="ds-nav-auth">
+                        <div class="ds-btn-outline">Connexion</div>
+                        <div class="ds-btn-primary">Inscription</div>
+                    </div>
+                </div>
+
+                <!-- Hero -->
+                <div class="ds-hero">
+                    <h1>Votre univers gaming,<br><span>au meme endroit.</span></h1>
+                    <p>Suivez vos jeux, notez-les, partagez vos avis.</p>
+                    <div class="ds-search">
+                        <div class="ds-search-input">Rechercher un jeu...</div>
+                        <div class="ds-btn-primary">Rechercher</div>
+                    </div>
+                </div>
+
+                <!-- Reprendre -->
+                <div class="ds-section">
+                    <div class="ds-section-header">
+                        <div class="ds-section-title">Reprendre</div>
+                        <div class="ds-btn-sm">Ma collection</div>
+                    </div>
+                    <div class="ds-grid-3">
+                        <div class="ds-card">
+                            <div class="ds-card-image">&#127918;</div>
+                            <div class="ds-card-body">
+                                <div class="ds-card-title">Elden Ring</div>
+                                <div class="ds-card-tags"><span class="ds-tag ds-tag--accent">En cours</span><span class="ds-tag">45h 30min</span></div>
+                            </div>
+                        </div>
+                        <div class="ds-card">
+                            <div class="ds-card-image">&#127918;</div>
+                            <div class="ds-card-body">
+                                <div class="ds-card-title">Zelda: TotK</div>
+                                <div class="ds-card-tags"><span class="ds-tag ds-tag--accent">En cours</span><span class="ds-tag">12h 15min</span></div>
+                            </div>
+                        </div>
+                        <div class="ds-card">
+                            <div class="ds-card-image">&#127918;</div>
+                            <div class="ds-card-body">
+                                <div class="ds-card-title">Persona 5 Royal</div>
+                                <div class="ds-card-tags"><span class="ds-tag ds-tag--accent">En cours</span><span class="ds-tag">8h 00min</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jeux populaires -->
+                <div class="ds-section">
+                    <div class="ds-section-header">
+                        <div class="ds-section-title">Jeux populaires</div>
+                        <div class="ds-btn-sm">Voir tout</div>
+                    </div>
+                    <div class="ds-grid-4">
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">GTA VI</div><div class="ds-card-tags"><span class="ds-tag">PS5</span><span class="ds-tag">Action</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Baldur's Gate 3</div><div class="ds-card-tags"><span class="ds-tag">PC</span><span class="ds-tag">RPG</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Hollow Knight: Silksong</div><div class="ds-card-tags"><span class="ds-tag">Switch</span><span class="ds-tag">Aventure</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Valorant</div><div class="ds-card-tags"><span class="ds-tag">PC</span><span class="ds-tag">FPS</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Civilization VII</div><div class="ds-card-tags"><span class="ds-tag">PC</span><span class="ds-tag">Strategie</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">FC 25</div><div class="ds-card-tags"><span class="ds-tag">PS5</span><span class="ds-tag">Sport</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Celeste</div><div class="ds-card-tags"><span class="ds-tag">PC</span><span class="ds-tag">Indie</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Silent Hill 2</div><div class="ds-card-tags"><span class="ds-tag">PS5</span><span class="ds-tag">Horreur</span></div></div></div>
+                    </div>
+                </div>
+
+                <!-- Sorties recentes -->
+                <div class="ds-section">
+                    <div class="ds-section-header">
+                        <div class="ds-section-title">Sorties recentes</div>
+                        <div class="ds-btn-sm">Voir tout</div>
+                    </div>
+                    <div class="ds-grid-4">
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Monster Hunter Wilds</div><div class="ds-card-tags"><span class="ds-tag">PS5</span><span class="ds-tag">28/02/2026</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Avowed</div><div class="ds-card-tags"><span class="ds-tag">Xbox</span><span class="ds-tag">18/02/2026</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Like a Dragon</div><div class="ds-card-tags"><span class="ds-tag">PC</span><span class="ds-tag">14/02/2026</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image">&#127918;</div><div class="ds-card-body"><div class="ds-card-title">Assassin's Creed Shadows</div><div class="ds-card-tags"><span class="ds-tag">PS5</span><span class="ds-tag">20/03/2026</span></div></div></div>
+                    </div>
+                </div>
+
+                <!-- Explorer par genre -->
+                <div class="ds-section">
+                    <div class="ds-section-header">
+                        <div class="ds-section-title">Explorer par genre</div>
+                    </div>
+                    <div class="ds-genre-grid">
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#9876;&#65039;</span><span class="ds-genre-name">Action</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#128506;&#65039;</span><span class="ds-genre-name">Aventure</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#128009;</span><span class="ds-genre-name">RPG</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#127919;</span><span class="ds-genre-name">FPS</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#9823;&#65039;</span><span class="ds-genre-name">Strategie</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#9917;</span><span class="ds-genre-name">Sport</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#127950;&#65039;</span><span class="ds-genre-name">Course</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#128745;&#65039;</span><span class="ds-genre-name">Simulation</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#129513;</span><span class="ds-genre-name">Puzzle</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#127812;</span><span class="ds-genre-name">Plateforme</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#128123;</span><span class="ds-genre-name">Horreur</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#127912;</span><span class="ds-genre-name">Indie</span></div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="ds-cta">
+                    <h2>Pret a commencer ?</h2>
+                    <p>Creez votre compte et commencez a suivre vos jeux.</p>
+                    <div class="ds-btn-primary ds-btn-primary--lg" style="display:inline-block;">Creer un compte</div>
+                </div>
+
+                <!-- Footer -->
+                <div class="ds-footer">GameVault &copy; 2026 - Votre collection de jeux video</div>
+            </div>
+        </div>
+
+        <!-- ══════════ MOBILE ══════════ -->
+        <div class="mobile-wrapper">
+            <div class="view-label">Mobile (375px)</div>
+            <div class="mobile-frame">
+                <div class="mobile-notch"></div>
+
+                <!-- Navbar -->
+                <div class="ds-navbar">
+                    <div class="ds-logo" style="font-size:17px;">GameVault</div>
+                    <div class="ds-hamburger"><span></span><span></span><span></span></div>
+                    <div class="ds-nav-links"><!-- hidden on mobile --></div>
+                    <div class="ds-nav-auth">
+                        <div class="ds-btn-primary" style="font-size:11px; padding:5px 12px;">Inscription</div>
+                    </div>
+                </div>
+
+                <!-- Hero -->
+                <div class="ds-hero">
+                    <h1>Votre univers gaming,<br><span>au meme endroit.</span></h1>
+                    <p>Suivez vos jeux, notez-les, partagez vos avis.</p>
+                    <div class="ds-search">
+                        <div class="ds-search-input">Rechercher un jeu...</div>
+                        <div class="ds-btn-primary" style="text-align:center; padding:10px;">Rechercher</div>
+                    </div>
+                </div>
+
+                <!-- Reprendre -->
+                <div class="ds-section">
+                    <div class="ds-section-header">
+                        <div class="ds-section-title">Reprendre</div>
+                        <div class="ds-btn-sm" style="font-size:10px;">Ma collection</div>
+                    </div>
+                    <div class="ds-grid-3">
+                        <div class="ds-card">
+                            <div class="ds-card-image" style="height:100px;">&#127918;</div>
+                            <div class="ds-card-body">
+                                <div class="ds-card-title" style="font-size:12px;">Elden Ring</div>
+                                <div class="ds-card-tags"><span class="ds-tag ds-tag--accent" style="font-size:10px;">En cours</span></div>
+                            </div>
+                        </div>
+                        <div class="ds-card">
+                            <div class="ds-card-image" style="height:100px;">&#127918;</div>
+                            <div class="ds-card-body">
+                                <div class="ds-card-title" style="font-size:12px;">Zelda: TotK</div>
+                                <div class="ds-card-tags"><span class="ds-tag ds-tag--accent" style="font-size:10px;">En cours</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jeux populaires -->
+                <div class="ds-section">
+                    <div class="ds-section-header">
+                        <div class="ds-section-title">Jeux populaires</div>
+                        <div class="ds-btn-sm" style="font-size:10px;">Voir tout</div>
+                    </div>
+                    <div class="ds-grid-4">
+                        <div class="ds-card"><div class="ds-card-image" style="height:100px;">&#127918;</div><div class="ds-card-body"><div class="ds-card-title" style="font-size:12px;">GTA VI</div><div class="ds-card-tags"><span class="ds-tag" style="font-size:10px;">PS5</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image" style="height:100px;">&#127918;</div><div class="ds-card-body"><div class="ds-card-title" style="font-size:12px;">Baldur's Gate 3</div><div class="ds-card-tags"><span class="ds-tag" style="font-size:10px;">PC</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image" style="height:100px;">&#127918;</div><div class="ds-card-body"><div class="ds-card-title" style="font-size:12px;">Silksong</div><div class="ds-card-tags"><span class="ds-tag" style="font-size:10px;">Switch</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image" style="height:100px;">&#127918;</div><div class="ds-card-body"><div class="ds-card-title" style="font-size:12px;">Valorant</div><div class="ds-card-tags"><span class="ds-tag" style="font-size:10px;">PC</span></div></div></div>
+                    </div>
+                </div>
+
+                <!-- Sorties recentes -->
+                <div class="ds-section">
+                    <div class="ds-section-header">
+                        <div class="ds-section-title">Sorties recentes</div>
+                        <div class="ds-btn-sm" style="font-size:10px;">Voir tout</div>
+                    </div>
+                    <div class="ds-grid-4">
+                        <div class="ds-card"><div class="ds-card-image" style="height:100px;">&#127918;</div><div class="ds-card-body"><div class="ds-card-title" style="font-size:12px;">Monster Hunter</div><div class="ds-card-tags"><span class="ds-tag" style="font-size:10px;">28/02</span></div></div></div>
+                        <div class="ds-card"><div class="ds-card-image" style="height:100px;">&#127918;</div><div class="ds-card-body"><div class="ds-card-title" style="font-size:12px;">Avowed</div><div class="ds-card-tags"><span class="ds-tag" style="font-size:10px;">18/02</span></div></div></div>
+                    </div>
+                </div>
+
+                <!-- Explorer par genre -->
+                <div class="ds-section">
+                    <div class="ds-section-header">
+                        <div class="ds-section-title">Explorer par genre</div>
+                    </div>
+                    <div class="ds-genre-grid">
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#9876;&#65039;</span><span class="ds-genre-name">Action</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#128506;&#65039;</span><span class="ds-genre-name">Aventure</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#128009;</span><span class="ds-genre-name">RPG</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#127919;</span><span class="ds-genre-name">FPS</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#9823;&#65039;</span><span class="ds-genre-name">Strategie</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#9917;</span><span class="ds-genre-name">Sport</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#127950;&#65039;</span><span class="ds-genre-name">Course</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#128745;&#65039;</span><span class="ds-genre-name">Simulation</span></div>
+                        <div class="ds-genre-card"><span class="ds-genre-emoji">&#129513;</span><span class="ds-genre-name">Puzzle</span></div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="ds-cta">
+                    <h2>Pret a commencer ?</h2>
+                    <p style="font-size:13px;">Creez votre compte et commencez a suivre vos jeux.</p>
+                    <div class="ds-btn-primary" style="display:inline-block; padding:10px 24px;">Creer un compte</div>
+                </div>
+
+                <!-- Footer -->
+                <div class="ds-footer">GameVault &copy; 2026</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

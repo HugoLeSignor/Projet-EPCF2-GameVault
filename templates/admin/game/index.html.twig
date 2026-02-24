@@ -10,40 +10,42 @@
         </div>
     </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Plateforme</th>
-                <th>Genre</th>
-                <th>Date sortie</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for game in pagination %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td><strong>{{ game.titre }}</strong></td>
-                    <td>{{ game.plateforme }}</td>
-                    <td>{{ game.genre }}</td>
-                    <td>{{ game.dateDeSortie ? game.dateDeSortie|date('d/m/Y') : '-' }}</td>
-                    <td>
-                        <div class="d-flex gap-sm">
-                            <a href="{{ path('admin_game_edit', {id: game.id}) }}" class="btn btn--outline btn--sm">Modifier</a>
-                            <form action="{{ path('admin_game_delete', {id: game.id}) }}" method="post" style="display:inline;">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ game.id) }}">
-                                <button type="submit" class="btn btn--danger btn--sm" onclick="return confirm('Supprimer ce jeu ?')">Supprimer</button>
-                            </form>
-                        </div>
-                    </td>
+                    <th>Titre</th>
+                    <th>Plateforme</th>
+                    <th>Genre</th>
+                    <th>Date sortie</th>
+                    <th>Actions</th>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="5" class="text-center text-muted">Aucun jeu dans le catalogue.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for game in pagination %}
+                    <tr>
+                        <td><strong>{{ game.titre }}</strong></td>
+                        <td>{{ game.plateforme }}</td>
+                        <td>{{ game.genre }}</td>
+                        <td>{{ game.dateDeSortie ? game.dateDeSortie|date('d/m/Y') : '-' }}</td>
+                        <td>
+                            <div class="d-flex gap-sm">
+                                <a href="{{ path('admin_game_edit', {id: game.id}) }}" class="btn btn--outline btn--sm">Modifier</a>
+                                <form action="{{ path('admin_game_delete', {id: game.id}) }}" method="post" style="display:inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ game.id) }}">
+                                    <button type="submit" class="btn btn--danger btn--sm" onclick="return confirm('Supprimer ce jeu ?')">Supprimer</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Aucun jeu dans le catalogue.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
     {{ knp_pagination_render(pagination) }}
 {% endblock %}

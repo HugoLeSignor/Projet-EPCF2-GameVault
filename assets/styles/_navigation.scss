@@ -27,6 +27,46 @@
         }
     }
 
+    // Burger button — hidden on desktop
+    &__burger {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: $spacing-xs;
+        flex-direction: column;
+        gap: 5px;
+
+        span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: $color-text-secondary;
+            border-radius: 2px;
+            transition: $transition-base;
+        }
+
+        &--open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        &--open span:nth-child(2) {
+            opacity: 0;
+        }
+        &--open span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+    }
+
+    // Collapsible wrapper (menu + auth)
+    &__collapse {
+        display: flex;
+        align-items: center;
+        gap: $spacing-lg;
+        flex: 1;
+        justify-content: space-between;
+        margin-left: $spacing-lg;
+    }
+
     &__menu {
         display: flex;
         gap: $spacing-lg;
@@ -97,6 +137,64 @@
         color: #fff;
         background-color: $color-accent;
         border-radius: $radius-pill;
+    }
+}
+
+// ── Mobile menu ──
+@media (max-width: $breakpoint-md) {
+    .navbar {
+        &__burger {
+            display: flex;
+        }
+
+        &__collapse {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: $color-bg-secondary;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: $spacing-md $spacing-lg;
+            margin-left: 0;
+            gap: $spacing-md;
+            box-shadow: $shadow-lg;
+
+            &--open {
+                display: flex;
+            }
+        }
+
+        &__menu {
+            flex-direction: column;
+            gap: $spacing-xs;
+            width: 100%;
+        }
+
+        &__link {
+            display: block;
+            padding: $spacing-sm $spacing-md;
+            font-size: $font-size-base;
+        }
+
+        &__auth {
+            width: 100%;
+            justify-content: center;
+            padding-top: $spacing-sm;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    }
+}
+
+// Admin layout (sidebar + content)
+.admin-layout {
+    display: flex;
+    gap: $spacing-lg;
+
+    > div {
+        flex: 1;
+        min-width: 0;
     }
 }
 
