@@ -46,4 +46,87 @@
     color: $color-text-muted;
     font-size: $font-size-sm;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+    &__links {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: $spacing-sm;
+        margin-bottom: $spacing-sm;
+    }
+
+    &__link {
+        color: $color-text-secondary;
+        text-decoration: none;
+        transition: $transition-base;
+
+        &:hover {
+            color: $color-accent;
+        }
+    }
+
+    &__separator {
+        color: $color-text-muted;
+    }
+
+    &__copy {
+        margin: 0;
+        color: $color-text-muted;
+    }
+}
+
+// Legal pages
+.legal-page {
+    max-width: 800px;
+    margin: 0 auto;
+
+    &__title {
+        font-size: $font-size-xxl;
+        margin-bottom: $spacing-lg;
+    }
+
+    &__intro {
+        color: $color-text-muted;
+        font-style: italic;
+        margin-bottom: $spacing-xl;
+    }
+
+    &__section {
+        margin-bottom: $spacing-xl;
+
+        h2 {
+            font-size: $font-size-lg;
+            color: $color-accent;
+            margin-bottom: $spacing-md;
+        }
+
+        p {
+            color: $color-text-secondary;
+            line-height: 1.7;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: $spacing-sm 0;
+
+            li {
+                color: $color-text-secondary;
+                padding: $spacing-xs 0 $spacing-xs $spacing-lg;
+                position: relative;
+                line-height: 1.6;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0.75em;
+                    width: 6px;
+                    height: 6px;
+                    border-radius: 50%;
+                    background-color: $color-accent;
+                }
+            }
+        }
+    }
 }

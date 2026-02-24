@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité - GameVault{% endblock %}
+
+{% block body %}
+    <div class="legal-page">
+        <h1 class="legal-page__title">Politique de confidentialité</h1>
+
+        <p class="legal-page__intro">
+            Dernière mise à jour : {{ 'now'|date('d/m/Y') }}
+        </p>
+
+        <section class="legal-page__section">
+            <h2>Préambule</h2>
+            <p>
+                GameVault est un projet scolaire à but éducatif. La présente politique de confidentialité décrit comment vos données personnelles sont collectées et utilisées dans le cadre de ce projet.
+            </p>
+        </section>
+
+        <section class="legal-page__section">
+            <h2>Données collectées</h2>
+            <p>Lors de votre utilisation du site, les données suivantes peuvent être collectées :</p>
+            <ul>
+                <li><strong>Lors de l'inscription :</strong> adresse e-mail, pseudo, mot de passe (stocké de manière chiffrée)</li>
+                <li><strong>Lors de l'utilisation :</strong> collection de jeux, avis, notes, temps de jeu, progression</li>
+                <li><strong>Profil :</strong> avatar, bannière, biographie (facultatifs)</li>
+            </ul>
+        </section>
+
+        <section class="legal-page__section">
+            <h2>Finalité du traitement</h2>
+            <p>Les données collectées sont utilisées exclusivement pour :</p>
+            <ul>
+                <li>Permettre la création et la gestion de votre compte</li>
+                <li>Gérer votre collection de jeux vidéo personnelle</li>
+                <li>Afficher vos avis et votre profil public</li>
+                <li>Permettre les interactions sociales (suivi d'utilisateurs, notifications)</li>
+            </ul>
+            <p>Aucune donnée n'est transmise à des tiers ni utilisée à des fins commerciales ou publicitaires.</p>
+        </section>
+
+        <section class="legal-page__section">
+            <h2>Stockage et sécurité</h2>
+            <p>
+                Les données sont stockées dans une base de données locale dans le cadre du projet scolaire. Les mots de passe sont hashés à l'aide d'algorithmes sécurisés fournis par le framework Symfony. Les actions sensibles sont protégées par des jetons CSRF.
+            </p>
+        </section>
+
+        <section class="legal-page__section">
+            <h2>Durée de conservation</h2>
+            <p>
+                Les données sont conservées pendant la durée du projet scolaire. Elles pourront être supprimées à la fin de celui-ci.
+            </p>
+        </section>
+
+        <section class="legal-page__section">
+            <h2>Vos droits</h2>
+            <p>Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants :</p>
+            <ul>
+                <li><strong>Droit d'accès :</strong> vous pouvez consulter vos données depuis votre profil</li>
+                <li><strong>Droit de rectification :</strong> vous pouvez modifier vos informations depuis la page de modification du profil</li>
+                <li><strong>Droit de suppression :</strong> vous pouvez demander la suppression de votre compte en contactant l'administrateur</li>
+            </ul>
+        </section>
+
+        <section class="legal-page__section">
+            <h2>Cookies</h2>
+            <p>
+                Le site utilise uniquement des cookies techniques nécessaires au fonctionnement (session de connexion, token « Se souvenir de moi »). Aucun cookie de tracking ou publicitaire n'est utilisé.
+            </p>
+        </section>
+
+        <section class="legal-page__section">
+            <h2>Services tiers</h2>
+            <p>
+                Le site utilise l'API <strong>IGDB</strong> (Twitch/Amazon) pour récupérer les informations sur les jeux vidéo. Aucune donnée personnelle des utilisateurs n'est transmise à ce service. Les polices de caractères sont chargées depuis <strong>Google Fonts</strong>.
+            </p>
+        </section>
+
+        <section class="legal-page__section">
+            <h2>Contact</h2>
+            <p>
+                Pour toute question concernant vos données personnelles, veuillez contacter l'équipe via les canaux de communication de l'établissement scolaire.
+            </p>
+        </section>
+    </div>
+{% endblock %}

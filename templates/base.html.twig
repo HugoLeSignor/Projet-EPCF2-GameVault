@@ -24,7 +24,12 @@
 
     <footer class="footer">
         <div class="container">
-            GameVault &copy; {{ 'now'|date('Y') }} — Votre collection de jeux vidéo
+            <div class="footer__links">
+                <a href="{{ path('app_mentions_legales') }}" class="footer__link">Mentions légales</a>
+                <span class="footer__separator">&middot;</span>
+                <a href="{{ path('app_privacy') }}" class="footer__link">Politique de confidentialité</a>
+            </div>
+            <p class="footer__copy">GameVault &copy; {{ 'now'|date('Y') }} — Projet scolaire à but éducatif</p>
         </div>
     </footer>
 
