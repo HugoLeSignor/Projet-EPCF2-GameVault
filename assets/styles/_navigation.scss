@@ -9,7 +9,6 @@
     &__container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
         max-width: $container-max-width;
         margin: 0 auto;
         padding: 0 $spacing-lg;
@@ -21,55 +20,28 @@
         font-weight: 700;
         color: $color-accent;
         letter-spacing: -0.5px;
+        flex-shrink: 0;
 
         &:hover {
             color: $color-accent-hover;
         }
     }
 
-    // Burger button — hidden on desktop
+    // Burger — hidden on desktop
     &__burger {
         display: none;
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: $spacing-xs;
-        flex-direction: column;
-        gap: 5px;
-
-        span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background-color: $color-text-secondary;
-            border-radius: 2px;
-            transition: $transition-base;
-        }
-
-        &--open span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        &--open span:nth-child(2) {
-            opacity: 0;
-        }
-        &--open span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
     }
 
-    // Collapsible wrapper (menu + auth)
+    // On desktop: collapse is invisible, children act as container's flex items
     &__collapse {
-        display: flex;
-        align-items: center;
-        gap: $spacing-lg;
-        flex: 1;
-        justify-content: space-between;
-        margin-left: $spacing-lg;
+        display: contents;
     }
 
     &__menu {
         display: flex;
-        gap: $spacing-lg;
+        gap: $spacing-md;
+        flex: 1;
+        margin-left: $spacing-xl;
     }
 
     &__link {
@@ -79,6 +51,7 @@
         padding: $spacing-xs $spacing-sm;
         border-radius: $radius-sm;
         transition: $transition-base;
+        white-space: nowrap;
 
         &:hover,
         &--active {
@@ -100,6 +73,8 @@
         display: flex;
         align-items: center;
         gap: $spacing-sm;
+        flex-shrink: 0;
+        margin-left: $spacing-md;
     }
 
     &__user {
@@ -145,8 +120,35 @@
     .navbar {
         &__burger {
             display: flex;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: $spacing-xs;
+            flex-direction: column;
+            gap: 5px;
+            margin-left: auto;
+
+            span {
+                display: block;
+                width: 24px;
+                height: 2px;
+                background-color: $color-text-secondary;
+                border-radius: 2px;
+                transition: $transition-base;
+            }
+
+            &--open span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            &--open span:nth-child(2) {
+                opacity: 0;
+            }
+            &--open span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -5px);
+            }
         }
 
+        // On mobile: collapse becomes a positioned dropdown
         &__collapse {
             display: none;
             flex-direction: column;
@@ -157,9 +159,9 @@
             background-color: $color-bg-secondary;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             padding: $spacing-md $spacing-lg;
-            margin-left: 0;
             gap: $spacing-md;
             box-shadow: $shadow-lg;
+            z-index: 99;
 
             &--open {
                 display: flex;
@@ -170,6 +172,8 @@
             flex-direction: column;
             gap: $spacing-xs;
             width: 100%;
+            margin-left: 0;
+            flex: none;
         }
 
         &__link {
@@ -183,6 +187,7 @@
             justify-content: center;
             padding-top: $spacing-sm;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-left: 0;
         }
     }
 }
