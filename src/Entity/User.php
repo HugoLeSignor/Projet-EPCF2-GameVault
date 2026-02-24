@@ -47,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $avatarFilename = null;
 
     #[Vich\UploadableField(mapping: 'user_avatars', fileNameProperty: 'avatarFilename')]
-    #[Assert\Image(maxSize: '2M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp'])]
+    #[Assert\Image(maxSize: '2M', mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'])]
     private ?File $avatarFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -270,5 +270,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getNotifications(): Collection
     {
         return $this->notifications;
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'pseudo' => $this->pseudo,
+            'password' => $this->password,
+            'roles' => $this->roles,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->email = $data['email'];
+        $this->pseudo = $data['pseudo'];
+        $this->password = $data['password'];
+        $this->roles = $data['roles'];
     }
 }
