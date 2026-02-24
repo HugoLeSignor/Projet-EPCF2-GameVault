@@ -7,6 +7,7 @@ use App\Entity\UserGameCollection;
 use App\Form\GameFilterType;
 use App\Form\UserGameCollectionType;
 use App\Repository\UserGameCollectionRepository;
+use App\Service\IgdbService;
 use App\Service\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -60,6 +61,7 @@ class CollectionController extends AbstractController
         EntityManagerInterface $em,
         UserGameCollectionRepository $collectionRepo,
         NotificationService $notifService,
+        IgdbService $igdbService,
     ): Response {
         $existing = $collectionRepo->findOneBy([
             'user' => $this->getUser(),
@@ -69,6 +71,8 @@ class CollectionController extends AbstractController
             $this->addFlash('warning', 'Ce jeu est déjà dans votre collection.');
             return $this->redirectToRoute('app_collection_index');
         }
+
+        $this->refreshGamePlatforms($game, $igdbService, $em);
 
         $entry = new UserGameCollection();
         $entry->setUser($this->getUser());
@@ -109,10 +113,13 @@ class CollectionController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         NotificationService $notifService,
+        IgdbService $igdbService,
     ): Response {
         if ($entry->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }
+
+        $this->refreshGamePlatforms($entry->getGame(), $igdbService, $em);
 
         $form = $this->createForm(UserGameCollectionType::class, $entry, [
             'game_platforms' => $entry->getGame()->getPlateformes(),
@@ -175,5 +182,20 @@ class CollectionController extends AbstractController
         }
 
         return $this->redirectToRoute('app_collection_index');
+    }
+
+    private function refreshGamePlatforms(Game $game, IgdbService $igdbService, EntityManagerInterface $em): void
+    {
+        if ($game->getIgdbId() && !str_contains($game->getPlateforme(), ', ')) {
+            try {
+                $data = $igdbService->getGameById($game->getIgdbId());
+                if ($data && count($data['platforms']) > 1) {
+                    $game->setPlateforme(implode(', ', $data['platforms']));
+                    $em->flush();
+                }
+            } catch (\Exception) {
+                // Silently fail - keep existing platform data
+            }
+        }
     }
 }
