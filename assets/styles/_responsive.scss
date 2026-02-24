@@ -65,13 +65,44 @@
         }
     }
 
-    // Collection items stack
+    // Collection items — grid layout on mobile (cover left, info+actions right)
     .collection-item {
-        flex-direction: column;
-        text-align: center;
+        display: grid;
+        grid-template-columns: 70px 1fr;
+        grid-template-rows: auto auto;
+        gap: $spacing-xs $spacing-md;
+        align-items: start;
+        text-align: left;
+
+        &__image,
+        &__placeholder {
+            grid-row: 1 / 3;
+            width: 70px;
+            height: 92px;
+            align-self: center;
+        }
+
+        &__info {
+            grid-column: 2;
+            grid-row: 1;
+            min-width: 0;
+        }
+
+        &__title {
+            font-size: $font-size-sm;
+            margin-bottom: 2px;
+        }
+
+        &__meta {
+            gap: $spacing-xs;
+            font-size: 0.75rem;
+        }
 
         &__actions {
-            justify-content: center;
+            grid-column: 2;
+            grid-row: 2;
+            justify-content: flex-start;
+            gap: $spacing-xs;
         }
     }
 
@@ -349,19 +380,35 @@
         }
     }
 
-    // Collection items compact
+    // Collection items even more compact on small mobile
     .collection-item {
+        grid-template-columns: 55px 1fr;
         padding: $spacing-sm $spacing-md;
-        gap: $spacing-sm;
+        gap: $spacing-xs $spacing-sm;
 
         &__image,
         &__placeholder {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 72px;
+        }
+
+        &__title {
+            font-size: $font-size-sm;
         }
 
         &__meta {
-            gap: $spacing-sm;
+            font-size: 0.7rem;
+            gap: $spacing-xs;
+
+            .badge {
+                font-size: 0.6rem;
+                padding: 1px $spacing-xs;
+            }
+        }
+
+        &__actions .btn {
+            padding: $spacing-xs $spacing-sm;
+            font-size: 0.7rem;
         }
     }
 
