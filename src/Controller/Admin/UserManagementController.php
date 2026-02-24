@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_ADMIN')]
 class UserManagementController extends AbstractController
 {
+    public function __construct(
+        private readonly LoggerInterface $auditLogger,
+    ) {}
+
     #[Route('', name: 'admin_user_index')]
     public function index(
         UserRepository $userRepo,
@@ -40,12 +45,22 @@ class UserManagementController extends AbstractController
         EntityManagerInterface $em,
     ): Response {
         if ($this->isCsrfTokenValid('toggle' . $user->getId(), $request->getPayload()->getString('_token'))) {
+            $oldRoles = $user->getRoles();
             if (in_array('ROLE_ADMIN', $user->getRoles())) {
                 $user->setRoles([]);
             } else {
                 $user->setRoles(['ROLE_ADMIN']);
             }
             $em->flush();
+
+            $this->auditLogger->info('Role changed', [
+                'admin' => $this->getUser()->getUserIdentifier(),
+                'target_user' => $user->getPseudo(),
+                'target_id' => $user->getId(),
+                'old_roles' => $oldRoles,
+                'new_roles' => $user->getRoles(),
+            ]);
+
             $this->addFlash('success', sprintf('Rôle de %s modifié.', $user->getPseudo()));
         }
 
@@ -64,9 +79,19 @@ class UserManagementController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->getPayload()->getString('_token'))) {
+            $pseudo = $user->getPseudo();
+            $userId = $user->getId();
+
             $em->remove($user);
             $em->flush();
-            $this->addFlash('success', sprintf('Utilisateur %s supprimé.', $user->getPseudo()));
+
+            $this->auditLogger->warning('User deleted', [
+                'admin' => $this->getUser()->getUserIdentifier(),
+                'deleted_user' => $pseudo,
+                'deleted_id' => $userId,
+            ]);
+
+            $this->addFlash('success', sprintf('Utilisateur %s supprimé.', $pseudo));
         }
 
         return $this->redirectToRoute('admin_user_index');

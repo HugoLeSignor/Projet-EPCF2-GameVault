@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Enum\GameStatus;
 use App\Repository\UserGameCollectionRepository;
 use App\Service\IgdbService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,11 +28,7 @@ class HomeController extends AbstractController
 
         $inProgressEntries = [];
         if ($this->getUser()) {
-            $inProgressEntries = $collectionRepo->findBy(
-                ['user' => $this->getUser(), 'statut' => GameStatus::EnCours],
-                ['updatedAt' => 'DESC'],
-                6
-            );
+            $inProgressEntries = $collectionRepo->findInProgressForUser($this->getUser(), 6);
         }
 
         return $this->render('home/index.html.twig', [

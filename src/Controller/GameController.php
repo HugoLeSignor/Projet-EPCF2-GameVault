@@ -8,6 +8,7 @@ use App\Repository\ReviewRepository;
 use App\Repository\UserGameCollectionRepository;
 use App\Service\IgdbService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class GameController extends AbstractController
 {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {}
     #[Route('/games', name: 'app_game_index', methods: ['GET'])]
     public function index(
         Request $request,
@@ -22,7 +26,7 @@ class GameController extends AbstractController
         GameRepository $gameRepository,
         UserGameCollectionRepository $collectionRepo,
     ): Response {
-        $query = $request->query->getString('q');
+        $query = mb_substr($request->query->getString('q'), 0, 100);
         $genre = $request->query->getString('genre') ?: null;
         $platform = $request->query->getString('platform') ?: null;
         $results = [];
@@ -36,22 +40,26 @@ class GameController extends AbstractController
                 $results = $igdbService->getPopularGames($genre, $platform);
             }
 
-            // Check which games are already in user's collection
+            // Check which games are already in user's collection (batch query)
             if ($this->getUser() && !empty($results)) {
                 $igdbIds = array_map(fn(array $r) => $r['igdbId'], $results);
                 $existingGames = $gameRepository->findBy(['igdbId' => $igdbIds]);
-                foreach ($existingGames as $game) {
-                    $inCollection = $collectionRepo->findOneBy([
-                        'user' => $this->getUser(),
-                        'game' => $game,
-                    ]);
-                    if ($inCollection) {
-                        $alreadyInCollection[$game->getIgdbId()] = true;
+
+                if (!empty($existingGames)) {
+                    $inCollectionIds = $collectionRepo->findGameIdsInUserCollection(
+                        $this->getUser(),
+                        $existingGames
+                    );
+                    foreach ($existingGames as $game) {
+                        if (isset($inCollectionIds[$game->getId()])) {
+                            $alreadyInCollection[$game->getIgdbId()] = true;
+                        }
                     }
                 }
             }
         } catch (\Exception $e) {
-            $error = 'Erreur de connexion à IGDB : ' . $e->getMessage();
+            $this->logger->error('IGDB API error', ['exception' => $e]);
+            $error = 'Impossible de charger les jeux. Veuillez réessayer plus tard.';
         }
 
         return $this->render('game/index.html.twig', [
@@ -102,13 +110,14 @@ class GameController extends AbstractController
 
             $em->persist($game);
             $em->flush();
-        } elseif (!str_contains($game->getPlateforme(), ', ')) {
+        } elseif ($game->getPlatformsRefreshedAt() === null) {
             // Mettre à jour les plateformes des jeux importés avant le multi-plateforme
             $data = $igdbService->getGameById($igdbId);
             if ($data && count($data['platforms']) > 1) {
                 $game->setPlateforme(implode(', ', $data['platforms']));
-                $em->flush();
             }
+            $game->setPlatformsRefreshedAt(new \DateTimeImmutable());
+            $em->flush();
         }
 
         return $this->renderGameShow($game, $reviewRepository, $collectionRepo);

@@ -1,6 +1,7 @@
 monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+        - admin_audit
 
 when@dev:
     monolog:
@@ -10,6 +11,11 @@ when@dev:
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
                 channels: ["!event"]
+            admin_audit:
+                type: stream
+                path: "%kernel.logs_dir%/admin_audit.log"
+                level: info
+                channels: [admin_audit]
             console:
                 type: console
                 process_psr_3_messages: false
@@ -44,6 +50,11 @@ when@prod:
                 path: php://stderr
                 level: debug
                 formatter: monolog.formatter.json
+            admin_audit:
+                type: stream
+                path: "%kernel.logs_dir%/admin_audit.log"
+                level: info
+                channels: [admin_audit]
             console:
                 type: console
                 process_psr_3_messages: false

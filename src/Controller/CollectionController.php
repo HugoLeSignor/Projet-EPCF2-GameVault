@@ -186,13 +186,14 @@ class CollectionController extends AbstractController
 
     private function refreshGamePlatforms(Game $game, IgdbService $igdbService, EntityManagerInterface $em): void
     {
-        if ($game->getIgdbId() && !str_contains($game->getPlateforme(), ', ')) {
+        if ($game->getIgdbId() && $game->getPlatformsRefreshedAt() === null) {
             try {
                 $data = $igdbService->getGameById($game->getIgdbId());
                 if ($data && count($data['platforms']) > 1) {
                     $game->setPlateforme(implode(', ', $data['platforms']));
-                    $em->flush();
                 }
+                $game->setPlatformsRefreshedAt(new \DateTimeImmutable());
+                $em->flush();
             } catch (\Exception) {
                 // Silently fail - keep existing platform data
             }

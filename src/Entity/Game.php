@@ -63,6 +63,9 @@ class Game
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $platformsRefreshedAt = null;
+
     /** @var Collection<int, UserGameCollection> */
     #[ORM\OneToMany(targetEntity: UserGameCollection::class, mappedBy: 'game', orphanRemoval: true)]
     private Collection $userCollections;
@@ -247,6 +250,17 @@ class Game
     public function setImageUrl(?string $imageUrl): static
     {
         $this->imageUrl = $imageUrl;
+        return $this;
+    }
+
+    public function getPlatformsRefreshedAt(): ?\DateTimeImmutable
+    {
+        return $this->platformsRefreshedAt;
+    }
+
+    public function setPlatformsRefreshedAt(?\DateTimeImmutable $platformsRefreshedAt): static
+    {
+        $this->platformsRefreshedAt = $platformsRefreshedAt;
         return $this;
     }
 }

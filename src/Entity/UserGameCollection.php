@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserGameCollectionRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_user_game', columns: ['user_id', 'game_id'])]
+#[ORM\Index(name: 'idx_user_statut', columns: ['user_id', 'statut'])]
 class UserGameCollection
 {
     #[ORM\Id]
@@ -25,7 +26,7 @@ class UserGameCollection
     #[ORM\JoinColumn(nullable: false)]
     private ?Game $game = null;
 
-    #[ORM\Column(type: 'string', enumType: GameStatus::class)]
+    #[ORM\Column(type: 'string', length: 20, enumType: GameStatus::class)]
     private GameStatus $statut = GameStatus::Backlog;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true)]

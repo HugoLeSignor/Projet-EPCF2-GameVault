@@ -2,13 +2,12 @@
 
 namespace App\Service;
 
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class IgdbService
 {
-    private ?string $accessToken = null;
-    private ?int $tokenExpiresAt = null;
-
     private const GENRE_MAP = [
         'Fighting' => 'Action',
         'Shooter' => 'FPS',
@@ -37,29 +36,29 @@ class IgdbService
 
     // Our local genre → IGDB genre IDs
     public const GENRE_IDS = [
-        'Action' => [4, 25, 33],      // Fighting, Hack and slash, Arcade
-        'Aventure' => [31, 2, 34],     // Adventure, Point-and-click, Visual Novel
-        'RPG' => [12],                 // Role-playing
-        'FPS' => [5],                  // Shooter
-        'Stratégie' => [11, 15, 16, 24, 35, 36], // RTS, Strategy, TBS, Tactical, Card, MOBA
-        'Sport' => [14],               // Sport
-        'Course' => [10],              // Racing
-        'Simulation' => [13],          // Simulator
-        'Puzzle' => [9, 26],           // Puzzle, Quiz/Trivia
-        'Plateforme' => [8],           // Platform
-        'Horreur' => [31],             // Adventure (theme-based, closest match)
-        'Indie' => [32],               // Indie
+        'Action' => [4, 25, 33],
+        'Aventure' => [31, 2, 34],
+        'RPG' => [12],
+        'FPS' => [5],
+        'Stratégie' => [11, 15, 16, 24, 35, 36],
+        'Sport' => [14],
+        'Course' => [10],
+        'Simulation' => [13],
+        'Puzzle' => [9, 26],
+        'Plateforme' => [8],
+        'Horreur' => [31],
+        'Indie' => [32],
     ];
 
     // Our local platform → IGDB platform IDs
     public const PLATFORM_IDS = [
-        'PC' => [6, 14, 3],           // PC Windows, Mac, Linux
-        'PS5' => [167],                // PlayStation 5
-        'PS4' => [48],                 // PlayStation 4
-        'Xbox Series' => [169],        // Xbox Series X|S
-        'Xbox One' => [49],            // Xbox One
-        'Switch' => [130],             // Nintendo Switch
-        'Switch 2' => [612],           // Nintendo Switch 2
+        'PC' => [6, 14, 3],
+        'PS5' => [167],
+        'PS4' => [48],
+        'Xbox Series' => [169],
+        'Xbox One' => [49],
+        'Switch' => [130],
+        'Switch 2' => [612],
     ];
 
     // IGDB theme IDs to exclude (adult/NSFW content)
@@ -93,31 +92,30 @@ class IgdbService
         'iOS' => 'Mobile',
     ];
 
+    private const FIELDS = 'name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher';
+
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly string $igdbClientId,
         private readonly string $igdbClientSecret,
+        private readonly CacheInterface $cache,
     ) {}
 
     private function getAccessToken(): string
     {
-        if ($this->accessToken && $this->tokenExpiresAt && time() < $this->tokenExpiresAt) {
-            return $this->accessToken;
-        }
+        return $this->cache->get('igdb_access_token', function (ItemInterface $item) {
+            $response = $this->httpClient->request('POST', 'https://id.twitch.tv/oauth2/token', [
+                'body' => [
+                    'client_id' => $this->igdbClientId,
+                    'client_secret' => $this->igdbClientSecret,
+                    'grant_type' => 'client_credentials',
+                ],
+            ]);
 
-        $response = $this->httpClient->request('POST', 'https://id.twitch.tv/oauth2/token', [
-            'body' => [
-                'client_id' => $this->igdbClientId,
-                'client_secret' => $this->igdbClientSecret,
-                'grant_type' => 'client_credentials',
-            ],
-        ]);
-
-        $data = $response->toArray();
-        $this->accessToken = $data['access_token'];
-        $this->tokenExpiresAt = time() + ($data['expires_in'] ?? 5000) - 60;
-
-        return $this->accessToken;
+            $data = $response->toArray();
+            $item->expiresAfter(($data['expires_in'] ?? 5000) - 120);
+            return $data['access_token'];
+        });
     }
 
     private function apiRequest(string $endpoint, string $body): array
@@ -135,60 +133,85 @@ class IgdbService
 
     public function searchGames(string $query, ?string $genre = null, ?string $platform = null, int $limit = 20): array
     {
-        $conditions = [$this->getNsfwFilter()];
-        $genrePlatformWhere = $this->buildWhereClause($genre, $platform);
-        if ($genrePlatformWhere) {
-            $conditions[] = $genrePlatformWhere;
+        // Sanitize input: whitelist approach, max 100 chars
+        $sanitized = preg_replace('/[^a-zA-Z0-9\s\-\':àâäéèêëïîôùûüÿçÀÂÄÉÈÊËÏÎÔÙÛÜŸÇ]/u', '', $query);
+        $sanitized = trim(mb_substr($sanitized, 0, 100));
+
+        if (empty($sanitized)) {
+            return [];
         }
-        $where = implode(' & ', $conditions);
 
-        $body = sprintf(
-            'search "%s"; fields name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; where %s; limit %d;',
-            addslashes($query),
-            $where,
-            $limit
-        );
+        $cacheKey = 'igdb_search_' . md5($sanitized . $genre . $platform . $limit);
 
-        $results = $this->apiRequest('games', $body);
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($sanitized, $genre, $platform, $limit) {
+            $item->expiresAfter(600); // 10 minutes
 
-        return array_map(fn(array $game) => $this->formatGameResult($game), $results);
+            $conditions = [$this->getNsfwFilter()];
+            $genrePlatformWhere = $this->buildWhereClause($genre, $platform);
+            if ($genrePlatformWhere) {
+                $conditions[] = $genrePlatformWhere;
+            }
+
+            $body = sprintf(
+                'search "%s"; fields %s; where %s; limit %d;',
+                $sanitized,
+                self::FIELDS,
+                implode(' & ', $conditions),
+                $limit
+            );
+
+            $results = $this->apiRequest('games', $body);
+            return array_map(fn(array $game) => $this->formatGameResult($game), $results);
+        });
     }
 
     public function getPopularGames(?string $genre = null, ?string $platform = null, int $limit = 24): array
     {
-        $conditions = ['total_rating_count > 50', 'cover != null', $this->getNsfwFilter()];
-        $genrePlatformWhere = $this->buildWhereClause($genre, $platform);
-        if ($genrePlatformWhere) {
-            $conditions[] = $genrePlatformWhere;
-        }
+        $cacheKey = 'igdb_popular_' . md5($genre . $platform . $limit);
 
-        $body = sprintf(
-            'fields name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; sort total_rating_count desc; where %s; limit %d;',
-            implode(' & ', $conditions),
-            $limit
-        );
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($genre, $platform, $limit) {
+            $item->expiresAfter(3600); // 1 hour
 
-        $results = $this->apiRequest('games', $body);
+            $conditions = ['total_rating_count > 50', 'cover != null', $this->getNsfwFilter()];
+            $genrePlatformWhere = $this->buildWhereClause($genre, $platform);
+            if ($genrePlatformWhere) {
+                $conditions[] = $genrePlatformWhere;
+            }
 
-        return array_map(fn(array $game) => $this->formatGameResult($game), $results);
+            $body = sprintf(
+                'fields %s; sort total_rating_count desc; where %s; limit %d;',
+                self::FIELDS,
+                implode(' & ', $conditions),
+                $limit
+            );
+
+            $results = $this->apiRequest('games', $body);
+            return array_map(fn(array $game) => $this->formatGameResult($game), $results);
+        });
     }
 
     public function getRecentReleases(int $limit = 8): array
     {
-        $threeMonthsAgo = time() - (90 * 24 * 60 * 60);
-        $now = time();
+        $cacheKey = 'igdb_recent_' . $limit;
 
-        $body = sprintf(
-            'fields name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; sort first_release_date desc; where first_release_date >= %d & first_release_date <= %d & cover != null & total_rating_count > 5 & %s; limit %d;',
-            $threeMonthsAgo,
-            $now,
-            $this->getNsfwFilter(),
-            $limit
-        );
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($limit) {
+            $item->expiresAfter(3600); // 1 hour
 
-        $results = $this->apiRequest('games', $body);
+            $threeMonthsAgo = time() - (90 * 24 * 60 * 60);
+            $now = time();
 
-        return array_map(fn(array $game) => $this->formatGameResult($game), $results);
+            $body = sprintf(
+                'fields %s; sort first_release_date desc; where first_release_date >= %d & first_release_date <= %d & cover != null & total_rating_count > 5 & %s; limit %d;',
+                self::FIELDS,
+                $threeMonthsAgo,
+                $now,
+                $this->getNsfwFilter(),
+                $limit
+            );
+
+            $results = $this->apiRequest('games', $body);
+            return array_map(fn(array $game) => $this->formatGameResult($game), $results);
+        });
     }
 
     private function buildWhereClause(?string $genre, ?string $platform): string
@@ -210,18 +233,25 @@ class IgdbService
 
     public function getGameById(int $igdbId): ?array
     {
-        $body = sprintf(
-            'where id = %d; fields name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher; limit 1;',
-            $igdbId
-        );
+        $cacheKey = 'igdb_game_' . $igdbId;
 
-        $results = $this->apiRequest('games', $body);
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($igdbId) {
+            $item->expiresAfter(86400); // 24 hours
 
-        if (empty($results)) {
-            return null;
-        }
+            $body = sprintf(
+                'where id = %d; fields %s; limit 1;',
+                $igdbId,
+                self::FIELDS
+            );
 
-        return $this->formatGameResult($results[0]);
+            $results = $this->apiRequest('games', $body);
+
+            if (empty($results)) {
+                return null;
+            }
+
+            return $this->formatGameResult($results[0]);
+        });
     }
 
     private function formatGameResult(array $game): array

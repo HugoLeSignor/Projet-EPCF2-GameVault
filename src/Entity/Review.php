@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReviewRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_user_game_review', columns: ['user_id', 'game_id'])]
+#[ORM\Index(name: 'idx_game_approved', columns: ['game_id', 'is_approved'])]
 class Review
 {
     #[ORM\Id]

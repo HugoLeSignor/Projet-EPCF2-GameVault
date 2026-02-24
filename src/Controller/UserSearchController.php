@@ -19,7 +19,7 @@ class UserSearchController extends AbstractController
     #[Route('/users', name: 'app_users', methods: ['GET'])]
     public function index(Request $request, UserRepository $userRepo, ReviewRepository $reviewRepo): Response
     {
-        $query = $request->query->getString('q');
+        $query = mb_substr($request->query->getString('q'), 0, 50);
         $users = [];
 
         if ($query) {
@@ -43,7 +43,7 @@ class UserSearchController extends AbstractController
         UserFollowRepository $followRepo,
     ): Response {
         $stats = $statsService->getStatsForUser($user);
-        $entries = $collectionRepo->findBy(['user' => $user], ['addedAt' => 'DESC']);
+        $entries = $collectionRepo->findAllForUserWithGame($user);
 
         // Group entries by status in display order
         $statusOrder = [
