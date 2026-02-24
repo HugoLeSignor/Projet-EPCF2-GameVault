@@ -26,13 +26,13 @@ class ProfileType extends AbstractType
             ->add('avatarFile', VichImageType::class, [
                 'label' => 'Avatar',
                 'required' => false,
-                'allow_delete' => true,
+                'allow_delete' => false,
                 'download_uri' => false,
             ])
             ->add('bannerFile', VichImageType::class, [
                 'label' => 'Bannière de profil',
                 'required' => false,
-                'allow_delete' => true,
+                'allow_delete' => false,
                 'download_uri' => false,
             ]);
     }

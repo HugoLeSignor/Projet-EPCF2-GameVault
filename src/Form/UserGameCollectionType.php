@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserGameCollectionType extends AbstractType
@@ -45,10 +47,23 @@ class UserGameCollectionType extends AbstractType
                 'required' => false,
                 'placeholder' => 'Non noté',
             ])
-            ->add('tempsDeJeu', IntegerType::class, [
-                'label' => 'Temps de jeu (en minutes)',
+            ->add('heures', IntegerType::class, [
+                'label' => 'Heures',
+                'mapped' => false,
                 'required' => false,
                 'attr' => ['min' => 0, 'placeholder' => '0'],
+            ])
+            ->add('minutes', ChoiceType::class, [
+                'label' => 'Minutes',
+                'mapped' => false,
+                'required' => false,
+                'choices' => [
+                    '0 min' => 0,
+                    '15 min' => 15,
+                    '30 min' => 30,
+                    '45 min' => 45,
+                ],
+                'placeholder' => '0 min',
             ])
             ->add('progression', TextareaType::class, [
                 'label' => 'Où je me suis arrêté',
@@ -63,6 +78,27 @@ class UserGameCollectionType extends AbstractType
                 'required' => false,
                 'attr' => ['rows' => 4],
             ]);
+
+        // Pré-remplir heures/minutes depuis tempsDeJeu (en minutes)
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            $collection = $event->getData();
+            $form = $event->getForm();
+            if ($collection && $collection->getTempsDeJeu() !== null) {
+                $total = $collection->getTempsDeJeu();
+                $form->get('heures')->setData(intdiv($total, 60));
+                $form->get('minutes')->setData($total % 60 >= 45 ? 45 : ($total % 60 >= 30 ? 30 : ($total % 60 >= 15 ? 15 : 0)));
+            }
+        });
+
+        // Combiner heures + minutes → tempsDeJeu
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $collection = $event->getData();
+            $form = $event->getForm();
+            $h = (int) $form->get('heures')->getData();
+            $m = (int) $form->get('minutes')->getData();
+            $total = $h * 60 + $m;
+            $collection->setTempsDeJeu($total > 0 ? $total : null);
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

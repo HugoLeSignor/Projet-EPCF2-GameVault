@@ -15,7 +15,13 @@
             {{ form_row(form.plateforme) }}
             {{ form_row(form.statut) }}
             {{ form_row(form.note) }}
-            {{ form_row(form.tempsDeJeu) }}
+            <div class="form-group">
+                <label>Temps de jeu</label>
+                <div class="d-flex gap-sm" style="align-items: flex-end;">
+                    <div style="flex: 1;">{{ form_row(form.heures) }}</div>
+                    <div style="flex: 1;">{{ form_row(form.minutes) }}</div>
+                </div>
+            </div>
 
             {{ form_row(form.commentaire) }}
             <div class="d-flex gap-sm mt-lg">
