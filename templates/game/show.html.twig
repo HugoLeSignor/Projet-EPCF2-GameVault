@@ -25,6 +25,23 @@
                 {% endif %}
             </div>
 
+            {% if igdbRating or siteAvg %}
+                <div class="game-ratings">
+                    {% if igdbRating %}
+                        <div class="game-rating">
+                            <span class="game-rating__label">Note IGDB</span>
+                            <span class="game-rating__value"><i class="fa-solid fa-star"></i> {{ igdbRating }}/10</span>
+                        </div>
+                    {% endif %}
+                    {% if siteAvg %}
+                        <div class="game-rating game-rating--site">
+                            <span class="game-rating__label">Note GameVault <span class="game-rating__count">({{ siteReviewCount }} avis)</span></span>
+                            <span class="game-rating__value"><i class="fa-solid fa-star"></i> {{ siteAvg }}/10</span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
             {% if game.developpeur or game.editeur %}
                 <p class="text-sm text-muted">
                     {% if game.developpeur %}Dev: {{ game.developpeur }}{% endif %}

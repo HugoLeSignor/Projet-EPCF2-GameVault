@@ -34,6 +34,19 @@ class ReviewRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getAverageRatingForGame(Game $game): ?float
+    {
+        $result = $this->createQueryBuilder('r')
+            ->select('AVG(r.note) as avg')
+            ->where('r.game = :game')
+            ->andWhere('r.isApproved = true')
+            ->setParameter('game', $game)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result !== null ? round((float) $result, 1) : null;
+    }
+
     /**
      * @return Review[]
      */

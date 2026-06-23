@@ -75,6 +75,52 @@
 }
 
 // Game detail page
+.game-ratings {
+    display: flex;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+    margin: $spacing-md 0;
+}
+
+.game-rating {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background-color: rgba($color-star, 0.08);
+    border: 1px solid rgba($color-star, 0.2);
+    border-radius: $radius-md;
+    padding: $spacing-sm $spacing-md;
+
+    &--site {
+        background-color: rgba($color-accent, 0.08);
+        border-color: rgba($color-accent, 0.2);
+
+        .game-rating__value {
+            color: $color-accent;
+        }
+    }
+
+    &__label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: $color-text-muted;
+    }
+
+    &__count {
+        font-size: 0.65rem;
+        color: $color-text-muted;
+    }
+
+    &__value {
+        font-size: $font-size-lg;
+        font-weight: 700;
+        color: $color-star;
+
+        i { font-size: $font-size-base; }
+    }
+}
+
 .game-detail {
     display: grid;
     grid-template-columns: 350px 1fr;

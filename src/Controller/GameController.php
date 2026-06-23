@@ -122,7 +122,7 @@ class GameController extends AbstractController
             $em->flush();
         }
 
-        return $this->renderGameShow($game, $reviewRepository, $collectionRepo);
+        return $this->renderGameShow($game, $reviewRepository, $collectionRepo, $igdbService);
     }
 
     #[Route('/game/local/{id}', name: 'app_game_show_local', requirements: ['id' => '\d+'], methods: ['GET'])]
@@ -130,16 +130,19 @@ class GameController extends AbstractController
         Game $game,
         ReviewRepository $reviewRepository,
         UserGameCollectionRepository $collectionRepo,
+        IgdbService $igdbService,
     ): Response {
-        return $this->renderGameShow($game, $reviewRepository, $collectionRepo);
+        return $this->renderGameShow($game, $reviewRepository, $collectionRepo, $igdbService);
     }
 
     private function renderGameShow(
         Game $game,
         ReviewRepository $reviewRepository,
         UserGameCollectionRepository $collectionRepo,
+        IgdbService $igdbService,
     ): Response {
         $reviews = $reviewRepository->findApprovedByGame($game);
+        $siteAvg = $reviewRepository->getAverageRatingForGame($game);
         $inCollection = null;
 
         if ($this->getUser()) {
@@ -149,10 +152,21 @@ class GameController extends AbstractController
             ]);
         }
 
+        $igdbRating = null;
+        if ($game->getIgdbId()) {
+            try {
+                $igdbData = $igdbService->getGameById($game->getIgdbId());
+                $igdbRating = $igdbData['rating'] ?? null;
+            } catch (\Exception) {}
+        }
+
         return $this->render('game/show.html.twig', [
             'game' => $game,
             'reviews' => $reviews,
             'inCollection' => $inCollection,
+            'siteAvg' => $siteAvg,
+            'siteReviewCount' => count($reviews),
+            'igdbRating' => $igdbRating,
         ]);
     }
 }
