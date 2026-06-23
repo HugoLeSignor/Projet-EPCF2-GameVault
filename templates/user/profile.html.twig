@@ -109,7 +109,7 @@
                         {% elseif entry.game.imageFilename %}
                             <img src="{{ vich_uploader_asset(entry.game, 'imageFile') }}" alt="{{ entry.game.titre }}" class="profile-game-card__image">
                         {% else %}
-                            <div class="profile-game-card__placeholder">🎮</div>
+                            <div class="profile-game-card__placeholder"><i class="fa-solid fa-gamepad"></i></div>
                         {% endif %}
                         <div class="profile-game-card__overlay">
                             <span class="profile-game-card__title">{{ entry.game.titre }}</span>

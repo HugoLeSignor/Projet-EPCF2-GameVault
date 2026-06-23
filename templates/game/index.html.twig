@@ -43,7 +43,7 @@
 
     {% if (query or genre or platform) and results|length == 0 and not error %}
         <div class="empty-state">
-            <div class="empty-state__icon">🔍</div>
+            <div class="empty-state__icon"><i class="fa-solid fa-magnifying-glass"></i></div>
             <h3 class="empty-state__title">Aucun résultat</h3>
             <p class="empty-state__text">Essayez de modifier vos filtres.</p>
         </div>
@@ -57,7 +57,7 @@
                         {% if game.coverUrl %}
                             <img src="{{ game.coverUrl }}" alt="{{ game.name }}" class="game-card__image">
                         {% else %}
-                            <div class="game-card__placeholder">🎮</div>
+                            <div class="game-card__placeholder"><i class="fa-solid fa-gamepad"></i></div>
                         {% endif %}
                     </a>
                     <div class="game-card__body">

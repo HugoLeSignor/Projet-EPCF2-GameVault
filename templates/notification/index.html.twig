@@ -21,13 +21,13 @@
                 <div class="notif-item{{ not notif.read ? ' notif-item--unread' : '' }}">
                     <div class="notif-item__icon">
                         {% if notif.type == 'collection_add' %}
-                            🎮
+                            <i class="fa-solid fa-gamepad"></i>
                         {% elseif notif.type == 'collection_update' %}
-                            📝
+                            <i class="fa-regular fa-pen-to-square"></i>
                         {% elseif notif.type == 'review_new' %}
-                            ⭐
+                            <i class="fa-regular fa-star"></i>
                         {% else %}
-                            🔔
+                            <i class="fa-regular fa-bell"></i>
                         {% endif %}
                     </div>
                     <div class="notif-item__content">
@@ -42,7 +42,7 @@
                     </div>
                     {% if not notif.read %}
                         <form action="{{ path('app_notification_read', {id: notif.id}) }}" method="post">
-                            <button type="submit" class="btn btn--outline btn--sm" title="Marquer comme lu">✓</button>
+                            <button type="submit" class="btn btn--outline btn--sm" title="Marquer comme lu"><i class="fa-solid fa-check"></i></button>
                         </form>
                     {% endif %}
                 </div>
@@ -50,7 +50,7 @@
         </div>
     {% else %}
         <div class="empty-state">
-            <div class="empty-state__icon">🔔</div>
+            <div class="empty-state__icon"><i class="fa-regular fa-bell"></i></div>
             <h3 class="empty-state__title">Aucune notification</h3>
             <p class="empty-state__text">Suivez des joueurs pour recevoir des notifications quand ils mettent a jour leur collection.</p>
         </div>

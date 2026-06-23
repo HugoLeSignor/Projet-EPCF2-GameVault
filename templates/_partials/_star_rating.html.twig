@@ -1,6 +1,6 @@
 {% set max = max|default(10) %}
 <div class="star-rating" title="{{ rating }}/{{ max }}">
     {% for i in 1..max %}
-        <span class="star-rating__star{% if i <= rating %} star-rating__star--filled{% endif %}">★</span>
+        <i class="star-rating__star{% if i <= rating %} fa-solid fa-star star-rating__star--filled{% else %} fa-regular fa-star{% endif %}"></i>
     {% endfor %}
 </div>

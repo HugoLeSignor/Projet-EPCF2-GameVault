@@ -49,7 +49,7 @@
                             {% elseif entry.game.imageUrl %}
                                 <img src="{{ entry.game.imageUrl }}" alt="{{ entry.game.titre }}" class="game-card__image">
                             {% else %}
-                                <div class="game-card__placeholder">🎮</div>
+                                <div class="game-card__placeholder"><i class="fa-solid fa-gamepad"></i></div>
                             {% endif %}
                         </a>
                         <div class="game-card__body">
@@ -83,7 +83,7 @@
                             {% if game.coverUrl %}
                                 <img src="{{ game.coverUrl }}" alt="{{ game.name }}" class="game-card__image">
                             {% else %}
-                                <div class="game-card__placeholder">🎮</div>
+                                <div class="game-card__placeholder"><i class="fa-solid fa-gamepad"></i></div>
                             {% endif %}
                         </a>
                         <div class="game-card__body">
@@ -115,7 +115,7 @@
                             {% if game.coverUrl %}
                                 <img src="{{ game.coverUrl }}" alt="{{ game.name }}" class="game-card__image">
                             {% else %}
-                                <div class="game-card__placeholder">🎮</div>
+                                <div class="game-card__placeholder"><i class="fa-solid fa-gamepad"></i></div>
                             {% endif %}
                         </a>
                         <div class="game-card__body">
@@ -140,24 +140,24 @@
         <div class="home-section__header">
             <h2 class="home-section__title">Explorer par genre</h2>
         </div>
-        {% set genreEmojis = {
-            'Action': '⚔️',
-            'Aventure': '🗺️',
-            'RPG': '🐉',
-            'FPS': '🎯',
-            'Stratégie': '♟️',
-            'Sport': '⚽',
-            'Course': '🏎️',
-            'Simulation': '🛩️',
-            'Puzzle': '🧩',
-            'Plateforme': '🍄',
-            'Horreur': '👻',
-            'Indie': '🎨'
+        {% set genreIcons = {
+            'Action': 'fa-solid fa-bolt',
+            'Aventure': 'fa-solid fa-compass',
+            'RPG': 'fa-solid fa-hat-wizard',
+            'FPS': 'fa-solid fa-crosshairs',
+            'Stratégie': 'fa-solid fa-chess',
+            'Sport': 'fa-solid fa-trophy',
+            'Course': 'fa-solid fa-flag-checkered',
+            'Simulation': 'fa-solid fa-plane',
+            'Puzzle': 'fa-solid fa-puzzle-piece',
+            'Plateforme': 'fa-solid fa-shoe-prints',
+            'Horreur': 'fa-solid fa-skull',
+            'Indie': 'fa-solid fa-star'
         } %}
         <div class="genre-grid">
             {% for genre in genres %}
                 <a href="{{ path('app_game_index', {genre: genre}) }}" class="genre-card">
-                    <span class="genre-card__emoji">{{ genreEmojis[genre] ?? '🎮' }}</span>
+                    <i class="{{ genreIcons[genre] ?? 'fa-solid fa-gamepad' }} genre-card__icon"></i>
                     <span class="genre-card__name">{{ genre }}</span>
                 </a>
             {% endfor %}

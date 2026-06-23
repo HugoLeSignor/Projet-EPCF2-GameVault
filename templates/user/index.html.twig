@@ -39,7 +39,7 @@
             </div>
         {% else %}
             <div class="empty-state">
-                <div class="empty-state__icon">🔍</div>
+                <div class="empty-state__icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                 <h3 class="empty-state__title">Aucun joueur trouvé</h3>
                 <p class="empty-state__text">Aucun utilisateur ne correspond à "{{ query }}".</p>
             </div>
@@ -89,7 +89,7 @@
     {% else %}
         {% if not query %}
             <div class="empty-state">
-                <div class="empty-state__icon">💬</div>
+                <div class="empty-state__icon"><i class="fa-regular fa-comment"></i></div>
                 <h3 class="empty-state__title">Aucun avis pour le moment</h3>
                 <p class="empty-state__text">Soyez le premier à laisser un avis !</p>
             </div>
