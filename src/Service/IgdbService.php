@@ -92,7 +92,7 @@ class IgdbService
         'iOS' => 'Mobile',
     ];
 
-    private const FIELDS = 'name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher';
+    private const FIELDS = 'name,summary,cover.image_id,genres.name,platforms.name,first_release_date,involved_companies.company.name,involved_companies.developer,involved_companies.publisher,total_rating,total_rating_count';
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
@@ -131,7 +131,7 @@ class IgdbService
         return $response->toArray();
     }
 
-    public function searchGames(string $query, ?string $genre = null, ?string $platform = null, int $limit = 20): array
+    public function searchGames(string $query, ?string $genre = null, ?string $platform = null, ?int $minRating = null, int $limit = 20): array
     {
         // Sanitize input: whitelist approach, max 100 chars
         $sanitized = preg_replace('/[^a-zA-Z0-9\s\-\':àâäéèêëïîôùûüÿçÀÂÄÉÈÊËÏÎÔÙÛÜŸÇ]/u', '', $query);
@@ -141,13 +141,13 @@ class IgdbService
             return [];
         }
 
-        $cacheKey = 'igdb_search_' . md5($sanitized . $genre . $platform . $limit);
+        $cacheKey = 'igdb_search_' . md5($sanitized . $genre . $platform . $minRating . $limit);
 
-        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($sanitized, $genre, $platform, $limit) {
-            $item->expiresAfter(600); // 10 minutes
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($sanitized, $genre, $platform, $minRating, $limit) {
+            $item->expiresAfter(600);
 
             $conditions = [$this->getNsfwFilter()];
-            $genrePlatformWhere = $this->buildWhereClause($genre, $platform);
+            $genrePlatformWhere = $this->buildWhereClause($genre, $platform, $minRating);
             if ($genrePlatformWhere) {
                 $conditions[] = $genrePlatformWhere;
             }
@@ -165,15 +165,15 @@ class IgdbService
         });
     }
 
-    public function getPopularGames(?string $genre = null, ?string $platform = null, int $limit = 24): array
+    public function getPopularGames(?string $genre = null, ?string $platform = null, ?int $minRating = null, int $limit = 24): array
     {
-        $cacheKey = 'igdb_popular_' . md5($genre . $platform . $limit);
+        $cacheKey = 'igdb_popular_' . md5($genre . $platform . $minRating . $limit);
 
-        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($genre, $platform, $limit) {
-            $item->expiresAfter(3600); // 1 hour
+        return $this->cache->get($cacheKey, function (ItemInterface $item) use ($genre, $platform, $minRating, $limit) {
+            $item->expiresAfter(3600);
 
             $conditions = ['total_rating_count > 50', 'cover != null', $this->getNsfwFilter()];
-            $genrePlatformWhere = $this->buildWhereClause($genre, $platform);
+            $genrePlatformWhere = $this->buildWhereClause($genre, $platform, $minRating);
             if ($genrePlatformWhere) {
                 $conditions[] = $genrePlatformWhere;
             }
@@ -214,7 +214,7 @@ class IgdbService
         });
     }
 
-    private function buildWhereClause(?string $genre, ?string $platform): string
+    private function buildWhereClause(?string $genre, ?string $platform, ?int $minRating = null): string
     {
         $parts = [];
 
@@ -226,6 +226,11 @@ class IgdbService
         if ($platform && isset(self::PLATFORM_IDS[$platform])) {
             $ids = implode(',', self::PLATFORM_IDS[$platform]);
             $parts[] = 'platforms = (' . $ids . ')';
+        }
+
+        if ($minRating !== null && $minRating > 0) {
+            $parts[] = 'total_rating >= ' . ($minRating * 10);
+            $parts[] = 'total_rating_count > 10';
         }
 
         return implode(' & ', $parts);
@@ -303,6 +308,8 @@ class IgdbService
             $releaseDate = (new \DateTimeImmutable())->setTimestamp($game['first_release_date'])->format('Y-m-d');
         }
 
+        $rating = isset($game['total_rating']) ? round($game['total_rating'] / 10, 1) : null;
+
         return [
             'igdbId' => $game['id'],
             'name' => $game['name'] ?? 'Unknown',
@@ -314,6 +321,7 @@ class IgdbService
             'developer' => $developer,
             'publisher' => $publisher,
             'releaseDate' => $releaseDate,
+            'rating' => $rating,
         ];
     }
 

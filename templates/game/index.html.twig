@@ -28,9 +28,17 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="filter-bar__field">
+                <select name="min_rating" class="form-select">
+                    <option value="">Toutes les notes</option>
+                    <option value="7"{% if minRating == 7 %} selected{% endif %}>7+ / 10</option>
+                    <option value="8"{% if minRating == 8 %} selected{% endif %}>8+ / 10</option>
+                    <option value="9"{% if minRating == 9 %} selected{% endif %}>9+ / 10</option>
+                </select>
+            </div>
             <div class="filter-bar__actions">
                 <button type="submit" class="btn btn--primary btn--sm">Filtrer</button>
-                {% if query or genre or platform %}
+                {% if query or genre or platform or minRating %}
                     <a href="{{ path('app_game_index') }}" class="btn btn--outline btn--sm">Reset</a>
                 {% endif %}
             </div>
@@ -67,6 +75,9 @@
                         <div class="game-card__meta">
                             <span class="game-card__tag">{{ game.platform }}</span>
                             <span class="game-card__tag">{{ game.genre }}</span>
+                            {% if game.rating %}
+                                <span class="game-card__rating"><i class="fa-solid fa-star"></i> {{ game.rating }}/10</span>
+                            {% endif %}
                         </div>
                         {% if is_granted('ROLE_USER') %}
                             <div class="game-card__actions">

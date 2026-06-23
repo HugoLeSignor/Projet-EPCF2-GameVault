@@ -29,15 +29,16 @@ class GameController extends AbstractController
         $query = mb_substr($request->query->getString('q'), 0, 100);
         $genre = $request->query->getString('genre') ?: null;
         $platform = $request->query->getString('platform') ?: null;
+        $minRating = $request->query->getInt('min_rating') ?: null;
         $results = [];
         $error = null;
         $alreadyInCollection = [];
 
         try {
             if ($query) {
-                $results = $igdbService->searchGames($query, $genre, $platform);
+                $results = $igdbService->searchGames($query, $genre, $platform, $minRating);
             } else {
-                $results = $igdbService->getPopularGames($genre, $platform);
+                $results = $igdbService->getPopularGames($genre, $platform, $minRating);
             }
 
             // Check which games are already in user's collection (batch query)
@@ -66,6 +67,7 @@ class GameController extends AbstractController
             'query' => $query,
             'genre' => $genre,
             'platform' => $platform,
+            'minRating' => $minRating,
             'results' => $results,
             'error' => $error,
             'alreadyInCollection' => $alreadyInCollection,

@@ -56,6 +56,17 @@
         color: $color-text-muted;
     }
 
+    &__rating {
+        font-size: 0.7rem;
+        padding: 2px $spacing-sm;
+        background-color: rgba($color-star, 0.15);
+        border-radius: $radius-pill;
+        color: $color-star;
+        font-weight: 600;
+
+        i { font-size: 0.6rem; }
+    }
+
     &__actions {
         display: flex;
         gap: $spacing-xs;
