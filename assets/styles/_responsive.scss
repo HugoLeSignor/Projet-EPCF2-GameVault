@@ -159,11 +159,19 @@
         display: flex;
         flex-wrap: wrap;
         gap: $spacing-xs;
-        padding: $spacing-md;
+        padding: $spacing-sm $spacing-md;
 
         &__title {
             width: 100%;
             margin-bottom: $spacing-xs;
+            font-size: $font-size-sm;
+        }
+
+        &__link {
+            flex: 1 0 auto;
+            text-align: center;
+            padding: $spacing-xs $spacing-sm;
+            font-size: $font-size-sm;
         }
     }
 
@@ -173,8 +181,25 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    .table {
+    .table,
+    .admin-table {
         min-width: 500px;
+    }
+
+    // Dashboard action buttons wrap
+    .admin-layout .d-flex.gap-md {
+        flex-wrap: wrap;
+
+        .btn {
+            flex: 1 1 auto;
+            text-align: center;
+            justify-content: center;
+        }
+    }
+
+    // Stats grid 3 columns on tablet
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 
     // Page header stack
@@ -249,7 +274,7 @@
         padding: $spacing-sm;
         gap: $spacing-xs;
 
-        &__emoji {
+        &__icon {
             font-size: 1.2rem;
         }
 
