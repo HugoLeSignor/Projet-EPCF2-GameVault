@@ -77,10 +77,35 @@
         margin-left: $spacing-md;
     }
 
-    &__user {
-        color: $color-text-secondary;
-        font-size: $font-size-sm;
-        margin-right: $spacing-sm;
+    &__avatar-link {
+        display: flex;
+        align-items: center;
+        border-radius: $radius-pill;
+        transition: $transition-base;
+        text-decoration: none;
+
+        &:hover {
+            opacity: 0.85;
+        }
+    }
+
+    &__avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: $radius-pill;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+
+        &--placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $color-accent;
+            color: #fff;
+            font-size: $font-size-sm;
+            font-weight: 700;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
     }
 
     &__notif {

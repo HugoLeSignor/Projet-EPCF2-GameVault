@@ -8,8 +8,24 @@
         <h1 class="hero__title">Votre univers gaming,<br><span class="hero__accent">au même endroit.</span></h1>
         <p class="hero__subtitle">Suivez vos jeux, notez-les, partagez vos avis.</p>
         <form action="{{ path('app_game_index') }}" method="get" class="hero__search">
-            <input type="text" name="q" placeholder="Rechercher un jeu..." class="hero__input" autocomplete="off">
-            <button type="submit" class="btn btn--primary">Rechercher</button>
+            <div class="hero__search-row">
+                <input type="text" name="q" placeholder="Rechercher un jeu..." class="hero__input" autocomplete="off">
+                <button type="submit" class="btn btn--primary">Rechercher</button>
+            </div>
+            <div class="hero__filters">
+                <select name="genre" class="form-select hero__filter-select">
+                    <option value="">Tous les genres</option>
+                    {% for g in genres %}
+                        <option value="{{ g }}">{{ g }}</option>
+                    {% endfor %}
+                </select>
+                <select name="platform" class="form-select hero__filter-select">
+                    <option value="">Toutes les plateformes</option>
+                    {% for p in platforms %}
+                        <option value="{{ p }}">{{ p }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </form>
     </section>
 

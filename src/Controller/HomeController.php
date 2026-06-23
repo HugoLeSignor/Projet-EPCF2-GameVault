@@ -36,6 +36,7 @@ class HomeController extends AbstractController
             'recentReleases' => $recentReleases,
             'inProgressEntries' => $inProgressEntries,
             'genres' => array_keys(IgdbService::GENRE_IDS),
+            'platforms' => array_keys(IgdbService::PLATFORM_IDS),
             'error' => $error,
         ]);
     }

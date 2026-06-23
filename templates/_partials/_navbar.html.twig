@@ -29,7 +29,13 @@
                             <span class="navbar__badge">{{ unreadNotifCount }}</span>
                         {% endif %}
                     </a>
-                    <span class="navbar__user">{{ app.user.pseudo }}</span>
+                    <a href="{{ path('app_profile') }}" class="navbar__avatar-link" title="Mon profil">
+                        {% if app.user.avatarFilename %}
+                            <img src="{{ vich_uploader_asset(app.user, 'avatarFile') }}" alt="{{ app.user.pseudo }}" class="navbar__avatar">
+                        {% else %}
+                            <span class="navbar__avatar navbar__avatar--placeholder">{{ app.user.pseudo|first|upper }}</span>
+                        {% endif %}
+                    </a>
                     <a href="{{ path('app_logout') }}" class="btn btn--outline btn--sm">Déconnexion</a>
                 {% else %}
                     <a href="{{ path('app_login') }}" class="btn btn--outline btn--sm">Connexion</a>

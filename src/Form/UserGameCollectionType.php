@@ -34,14 +34,15 @@ class UserGameCollectionType extends AbstractType
                     GameStatus::cases(),
                 ),
             ])
-            ->add('note', ChoiceType::class, [
+            ->add('note', IntegerType::class, [
                 'label' => 'Note (sur 10)',
-                'choices' => array_combine(
-                    array_map(fn(int $i) => "$i/10", range(1, 10)),
-                    range(1, 10),
-                ),
                 'required' => false,
-                'placeholder' => 'Non noté',
+                'attr' => [
+                    'type' => 'range',
+                    'min' => 0,
+                    'max' => 10,
+                    'data-optional' => 'true',
+                ],
             ])
             ->add('heures', IntegerType::class, [
                 'label' => 'Heures',
@@ -75,18 +76,23 @@ class UserGameCollectionType extends AbstractType
                 'attr' => ['rows' => 4],
             ]);
 
-        // Pré-remplir heures/minutes depuis tempsDeJeu (en minutes)
+        // Pré-remplir heures/minutes depuis tempsDeJeu, et note (null → 0)
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $collection = $event->getData();
             $form = $event->getForm();
-            if ($collection && $collection->getTempsDeJeu() !== null) {
-                $total = $collection->getTempsDeJeu();
-                $form->get('heures')->setData(intdiv($total, 60));
-                $form->get('minutes')->setData($total % 60 >= 45 ? 45 : ($total % 60 >= 30 ? 30 : ($total % 60 >= 15 ? 15 : 0)));
+            if ($collection) {
+                if ($collection->getTempsDeJeu() !== null) {
+                    $total = $collection->getTempsDeJeu();
+                    $form->get('heures')->setData(intdiv($total, 60));
+                    $form->get('minutes')->setData($total % 60 >= 45 ? 45 : ($total % 60 >= 30 ? 30 : ($total % 60 >= 15 ? 15 : 0)));
+                }
+                if ($collection->getNote() === null) {
+                    $form->get('note')->setData(0);
+                }
             }
         });
 
-        // Combiner heures + minutes → tempsDeJeu
+        // Combiner heures + minutes → tempsDeJeu ; 0 → null pour note
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $collection = $event->getData();
             $form = $event->getForm();
@@ -94,6 +100,9 @@ class UserGameCollectionType extends AbstractType
             $m = (int) $form->get('minutes')->getData();
             $total = $h * 60 + $m;
             $collection->setTempsDeJeu($total > 0 ? $total : null);
+            if ((int) $collection->getNote() === 0) {
+                $collection->setNote(null);
+            }
         });
     }
 

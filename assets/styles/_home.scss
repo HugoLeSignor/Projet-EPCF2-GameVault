@@ -24,9 +24,24 @@
 
     &__search {
         display: flex;
+        flex-direction: column;
         max-width: 560px;
         margin: 0 auto;
         gap: $spacing-sm;
+    }
+
+    &__search-row {
+        display: flex;
+        gap: $spacing-sm;
+    }
+
+    &__filters {
+        display: flex;
+        gap: $spacing-sm;
+
+        .hero__filter-select {
+            flex: 1;
+        }
     }
 
     &__input {
